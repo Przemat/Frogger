@@ -1,0 +1,40 @@
+cars.png
+size: 391, 179
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+car1
+  rotate: false
+  xy: 117, 1
+  size: 139, 48
+  orig: 139, 48
+  offset: 0, 0
+  index: -1
+car2
+  rotate: false
+  xy: 1, 1
+  size: 114, 47
+  orig: 114, 47
+  offset: 0, 0
+  index: -1
+car3
+  rotate: false
+  xy: 258, 1
+  size: 132, 49
+  orig: 132, 49
+  offset: 0, 0
+  index: -1
+car4
+  rotate: false
+  xy: 195, 52
+  size: 191, 126
+  orig: 192, 126
+  offset: 0, 0
+  index: -1
+car5
+  rotate: false
+  xy: 1, 51
+  size: 192, 124
+  orig: 192, 124
+  offset: 0, 0
+  index: -1

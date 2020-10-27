@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<mapsobject>
+    <car id="car1">
+        <model>car1</model>
+        <position>3</position>
+        <config>1 2 2</config>
+        <speed>5</speed>
+        <direction>left</direction>
+    </car>
+</mapsobject>
