@@ -1,10 +1,57 @@
 <?xml version="1.0"?>
 <mapsobject>
-    <car id="car1">
+    <object>
+        <type>car</type>
         <model>car1</model>
+        <animation>0</animation>
         <position>3</position>
-        <config>1 2 2</config>
-        <speed>5</speed>
-        <direction>left</direction>
-    </car>
+        <count>2</count>
+        <space>5</space>
+        <speed>-1</speed>
+    </object>
+    <object>
+        <type>car</type>
+        <model>car1</model>
+        <animation>0</animation>
+        <position>16</position>
+        <count>2</count>
+        <space>5</space>
+        <speed>-1</speed>
+    </object>
+    <object>
+        <type>car</type>
+        <model>car1</model>
+        <animation>0</animation>
+        <position>29</position>
+        <count>2</count>
+        <space>5</space>
+        <speed>-1</speed>
+    </object>
+    <object>
+        <type>car</type>
+        <model>car2</model>
+        <animation>0</animation>
+        <position>4</position>
+        <count>2</count>
+        <space>5</space>
+        <speed>2</speed>
+    </object>
+    <object>
+        <type>car</type>
+        <model>car2</model>
+        <animation>0</animation>
+        <position>17</position>
+        <count>2</count>
+        <space>5</space>
+        <speed>2</speed>
+    </object>
+    <object>
+        <type>car</type>
+        <model>car2</model>
+        <animation>0</animation>
+        <position>30</position>
+        <count>2</count>
+        <space>5</space>
+        <speed>2</speed>
+    </object>
 </mapsobject>

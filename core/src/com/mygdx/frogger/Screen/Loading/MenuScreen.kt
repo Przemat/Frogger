@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL30
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.graphics.g2d.*
+import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.TmxMapLoader
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.Stage
@@ -12,66 +15,46 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.ScreenViewport
-import com.badlogic.gdx.maps.tiled.TiledMap
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer
-import com.badlogic.gdx.maps.tiled.TmxMapLoader
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
-import com.badlogic.gdx.math.Vector3
+import com.mygdx.frogger.Models.ReadObjects
+import com.mygdx.frogger.Models.xml
 import com.mygdx.frogger.MyGame
-import java.io.File
-import org.w3c.dom.Document
-import javax.xml.parsers.DocumentBuilderFactory
 
 
-class MenuScreen : Screen {
+class MenuScreen//myGame.setScreen(GameScreen(myGame))
+(myGame: MyGame) : Screen {
     var tiledMap: TiledMap? = null
     var camera: OrthographicCamera? = null
-    var tiledMapRenderer: TiledMapRenderer? = null
+    var tiledMapRenderer: OrthogonalTiledMapRenderer? = null
     var posCamera: Vector3 = Vector3(Gdx.graphics.width.toFloat() / 2, Gdx.graphics.height.toFloat() / 2, 0f)
     var scale: Float = Gdx.graphics.width.toFloat() / 720
 
-    var batch: SpriteBatch? = null
-    var animals: TextureAtlas? = null
-    var vehicles: TextureAtlas? = null
-    var assetsConf: Document? = null
+    var stateTime: Float? = null
+
+    val readObjects: ReadObjects
+    var objectList: Array<xml>
 
     private var stage: Stage? = null
 
-    private fun readObjcets(){
-        var xlmFile = File("maps/menuconf.xml")
-        assetsConf = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xlmFile)
-        assetsConf!!.documentElement.normalize()
-
-        
-    }
-
-    private fun moveObjcets(){
-
-    }
-
-
-    constructor(myGame: MyGame) {
+    init {
         stage = Stage(ScreenViewport())
-
-        var w = Gdx.graphics.width.toFloat()
-        var h = Gdx.graphics.height.toFloat()
-
+        val w = Gdx.graphics.width.toFloat()
+        val h = Gdx.graphics.height.toFloat()
         camera = OrthographicCamera()
         camera!!.setToOrtho(false, w, h)
         camera!!.update()
-
+        stateTime = 0f
+        val path = Gdx.files.internal("maps/menuconf.xml")
+        readObjects = ReadObjects(path)
+        objectList = readObjects.getObjects()
         tiledMap = TmxMapLoader().load("maps/menu.tmx")
         tiledMapRenderer = OrthogonalTiledMapRenderer(tiledMap, scale)
-
-
-        var title = Label("Frogger", myGame.gameSkin)
+        val title = Label("Frogger", myGame.gameSkin)
         title.setAlignment(Align.center)
         title.setY((Gdx.graphics.height * 2 / 3).toFloat())
         title.width = Gdx.graphics.width.toFloat()
         title.setFontScale(Gdx.graphics.width.toFloat() / 100)
         stage!!.addActor(title)
-
-        var playButton = TextButton("Play!", myGame.gameSkin)
+        val playButton = TextButton("Play!", myGame.gameSkin)
         playButton.setSize(Gdx.graphics.width.toFloat() / 2, Gdx.graphics.width.toFloat() / 4)
         playButton.setPosition(Gdx.graphics.width.toFloat() / 2 - playButton.width / 2, Gdx.graphics.height.toFloat() / 2 - playButton.height / 2)
         playButton.label.setFontScale(Gdx.graphics.width.toFloat() / 100)
@@ -89,6 +72,16 @@ class MenuScreen : Screen {
         stage!!.addActor(playButton)
     }
 
+    /* private fun readXml(): Document {
+         val xmlFile = File("maps/menuconf.xml")
+         val dbFactory = DocumentBuilderFactory.newInstance()
+         val dBuilder = dbFactory.newDocumentBuilder()
+         val xmlInput = InputSource(StringReader(xmlFile.readText()))
+         val doc = dBuilder.parse(xmlInput)
+         doc.documentElement.normalize()
+         return doc
+     }*/
+
     override fun hide() {
         TODO("Not yet implemented")
     }
@@ -98,12 +91,34 @@ class MenuScreen : Screen {
     }
 
     private fun cameraPoc() {
-        Gdx.app.log("POSY", posCamera.y.toString())
-        Gdx.app.log("Y", (Gdx.graphics.height.toFloat() / 2 + scale * 14 * 48).toString())
-        if (posCamera.y >= Gdx.graphics.height.toFloat() / 2 + scale * 14 * 48+10){
+        if (posCamera.y >= Gdx.graphics.height.toFloat() / 2 + scale * 14 * 48 + 10) {
             posCamera.y = (Gdx.graphics.height.toFloat() / 2) + scale * 48
-            camera!!.position.set(posCamera)}
+            camera!!.position.set(posCamera)
+        }
         posCamera.y += 100f * Gdx.graphics.deltaTime
+    }
+
+    private fun draw() {
+        stateTime = stateTime?.plus(Gdx.graphics.deltaTime)
+        //
+        for (i in 0..objectList.size - 1) {
+            val currentFrame = objectList[i].animation.getKeyFrame(stateTime!!, true)
+            if (objectList[i].speed < 0) {
+                if (objectList[i].pos.x >= -currentFrame!!.regionWidth*scale)
+                    objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
+                else
+                    objectList[i].pos.x = 48 * 15 * scale
+            } else {
+                if (objectList[i].pos.x <= 15 * 48 * scale+currentFrame!!.regionWidth*scale)
+                    objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
+                else
+                    objectList[i].pos.x = -48 * scale
+            }
+            objectList[i].sb.projectionMatrix = camera!!.combined
+            objectList[i].sb.begin()
+            objectList[i].sb.draw(currentFrame, objectList[i].pos.x, objectList[i].pos.y, currentFrame.regionWidth * scale, currentFrame.regionHeight * scale)
+            objectList[i].sb.end()
+        }
     }
 
     override fun render(delta: Float) {
@@ -113,8 +128,11 @@ class MenuScreen : Screen {
         cameraPoc()
         camera!!.position.lerp(posCamera, 0.1f)
         camera!!.update()
+
         tiledMapRenderer!!.setView(camera)
         tiledMapRenderer!!.render()
+
+        draw()
         stage!!.act()
         stage!!.draw()
     }
