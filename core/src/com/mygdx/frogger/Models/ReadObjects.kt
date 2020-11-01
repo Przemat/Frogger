@@ -51,7 +51,7 @@ class ReadObjects(level: FileHandle) {
                         mMap.pos = Vector2(j*(currentFrame!!.regionWidth*scale+48*scale*elem.getChildByName("space").text.toFloat()), elem.getChildByName("position").text.toInt()*48*scale)
                     }else{
                         val endOfScreen = 14*48*scale
-                        mMap.pos = Vector2(endOfScreen-(currentFrame!!.regionWidth*scale+48*scale*elem.getChildByName("space").text.toFloat()), elem.getChildByName("position").text.toInt()*48*scale)
+                        mMap.pos = Vector2(endOfScreen-j*(currentFrame!!.regionWidth*scale+48*scale*elem.getChildByName("space").text.toFloat()), elem.getChildByName("position").text.toInt()*48*scale)
                     }
                     objects.add(mMap)
                 }

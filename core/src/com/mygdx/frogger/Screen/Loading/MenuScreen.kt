@@ -104,19 +104,19 @@ class MenuScreen//myGame.setScreen(GameScreen(myGame))
         for (i in 0..objectList.size - 1) {
             val currentFrame = objectList[i].animation.getKeyFrame(stateTime!!, true)
             if (objectList[i].speed < 0) {
-                if (objectList[i].pos.x >= -currentFrame!!.regionWidth*scale)
+                if (objectList[i].pos.x >= -currentFrame!!.regionWidth*scale-10)
                     objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
                 else
                     objectList[i].pos.x = 48 * 15 * scale
             } else {
-                if (objectList[i].pos.x <= 15 * 48 * scale+currentFrame!!.regionWidth*scale)
+                if (objectList[i].pos.x <= 15 * 48 *scale+10)
                     objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
                 else
-                    objectList[i].pos.x = -48 * scale
+                    objectList[i].pos.x = -currentFrame!!.regionWidth * scale
             }
             objectList[i].sb.projectionMatrix = camera!!.combined
             objectList[i].sb.begin()
-            objectList[i].sb.draw(currentFrame, objectList[i].pos.x, objectList[i].pos.y, currentFrame.regionWidth * scale, currentFrame.regionHeight * scale)
+            objectList[i].sb.draw(currentFrame, objectList[i].pos.x, objectList[i].pos.y, currentFrame!!.regionWidth * scale, currentFrame!!.regionHeight * scale)
             objectList[i].sb.end()
         }
     }
