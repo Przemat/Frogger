@@ -2,6 +2,7 @@ package com.mygdx.frogger.Models
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
+import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
@@ -10,57 +11,144 @@ import com.badlogic.gdx.utils.XmlReader
 import java.lang.Enum
 
 class ReadObjects(level: FileHandle) {
+    var stateTime: Float? = null
+
     var level = level
     var scale: Float = Gdx.graphics.width.toFloat() / 720
+
     //cars
     var carAtlas: TextureAtlas
-    val objectsList: com.badlogic.gdx.utils.Array<XmlReader.Element>?
-    var objects: MutableList<xml> = arrayListOf()
+    val readList: com.badlogic.gdx.utils.Array<XmlReader.Element>?
+    var objectList: Array<xml>
+
     //animals
     var textureAtlas: TextureAtlas
 
     init {
+        stateTime = 0f
         val xmlList = readXml()
-        objectsList = xmlList
+        readList = xmlList
         carAtlas = TextureAtlas(Gdx.files.internal("gameassets/cars.atlas"))
         textureAtlas = TextureAtlas(Gdx.files.internal("gameassets/animals.atlas"))
+        objectList = getObjects()
     }
+
     private fun readXml(): com.badlogic.gdx.utils.Array<XmlReader.Element>? {
         //
         val reader = XmlReader()
         val xmlroot = reader.parse(level)
-        val objects = xmlroot.getChildrenByName("object")
+        val objects = xmlroot.getChildrenByName("position")
         return objects
     }
+
     @JvmName("getObjects1")
     fun getObjects(): Array<xml> {
-        for (item in objectsList!!){
-                val elem = item
-                val atlas: TextureAtlas
-                if(elem.getChildByName("type").text == "car")atlas = carAtlas
-                else atlas = textureAtlas
+        var objects: MutableList<xml> = arrayListOf()
+        for (item in readList!!) {
+            val elem = item
+            var atlas: TextureAtlas
+            val pos = item.getFloatAttribute("id")
+            for (j in 0..elem.childCount - 1) {
 
-                for (j in 0..elem.getChildByName("count").text.toInt()-1) {
+                val curobj = elem.getChild(j)
+                if (curobj.getAttribute("type") == "car") {
+                    atlas = carAtlas
                     val mMap = xml(SpriteBatch())
-                    mMap.type = Enum.valueOf<type>(type::class.java, elem.getChildByName("type").text)
-                    val textureRegion = atlas.findRegion(elem.getChildByName("model").text)
-                    mMap.animation= Animation(elem.getChildByName("animation").text.toFloat(), textureRegion)
-                    mMap.speed = elem.getChildByName("speed").text.toFloat()
-                    val currentFrame = mMap.animation.getKeyFrame(0f, true)
-                    if(mMap.speed>0){
-                        mMap.pos = Vector2(j*(currentFrame!!.regionWidth*scale+48*scale*elem.getChildByName("space").text.toFloat()), elem.getChildByName("position").text.toInt()*48*scale)
-                    }else{
-                        val endOfScreen = 14*48*scale
-                        mMap.pos = Vector2(endOfScreen-j*(currentFrame!!.regionWidth*scale+48*scale*elem.getChildByName("space").text.toFloat()), elem.getChildByName("position").text.toInt()*48*scale)
-                    }
+                    mMap.type = Enum.valueOf<type>(type::class.java, curobj.getAttribute("type"))
+                    val textureRegion = atlas.findRegions(curobj.getAttribute("model"))
+                    mMap.animation = Animation(curobj.getFloatAttribute("animation"), textureRegion)
+                    mMap.speed = curobj.getFloatAttribute("speed")
+                    mMap.pos = Vector2(scale * 48 * curobj.getFloatAttribute("position"), pos * 48 * scale)
+                    objects.add(mMap)
+                } else if (curobj.getAttribute("type") == "waterway") {
+                    atlas = textureAtlas
+                    val mMap = xml(SpriteBatch())
+                    mMap.type = Enum.valueOf<type>(type::class.java, curobj.getAttribute("type"))
+                    val textureRegion = atlas.findRegions(curobj.getAttribute("model"))
+                    mMap.animation = Animation(curobj.getFloatAttribute("animation"), textureRegion)
+                    mMap.speed = curobj.getFloatAttribute("speed")
+                    mMap.pos = Vector2(scale * 48 * curobj.getFloatAttribute("position"), pos * 48 * scale)
+                    objects.add(mMap)
+
+                } else if (curobj.getAttribute("type") == "bonus") {
+                    atlas = textureAtlas
+
+                } else {
+                    atlas = textureAtlas
+                    val mMap = xml(SpriteBatch())
+                    mMap.type = Enum.valueOf<type>(type::class.java, curobj.getAttribute("type"))
+                    val textureRegion = atlas.findRegions(curobj.getAttribute("model"))
+                    mMap.animation = Animation(curobj.getFloatAttribute("animation"), textureRegion)
+                    mMap.speed = curobj.getFloatAttribute("speed")
+                    mMap.pos = Vector2(scale * 48 * curobj.getFloatAttribute("position"), pos * 48 * scale)
                     objects.add(mMap)
                 }
+            }
+        }
+        return objects.toTypedArray()
+    }
 
+    fun draw(camera: OrthographicCamera) {
+        stateTime = stateTime?.plus(Gdx.graphics.deltaTime)
 
+        for (i in 0..objectList.size - 1) {
+            objectList[i].sb.projectionMatrix = camera!!.combined
+            if (objectList[i].type == type.car) {
+                var flip = false
+                val currentFrame = objectList[i].animation.getKeyFrame(stateTime!!, true)
 
+                if (objectList[i].speed < 0f) {
+                    if (objectList[i].pos.x >= -currentFrame!!.regionWidth * scale - 10)
+                        objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
+                    else
+                        objectList[i].pos.x = 48 * 15 * scale
+                } else {
+                    flip = true
+                    if (objectList[i].pos.x <= 15 * 48 * scale + 10)
+                        objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
+                    else
+                        objectList[i].pos.x = -currentFrame!!.regionWidth * scale
+                }
+
+                objectList[i].sb.begin()
+                objectList[i].sb.draw(currentFrame!!.texture, objectList[i].pos.x, objectList[i].pos.y, currentFrame!!.regionWidth * scale, currentFrame!!.regionHeight * scale, currentFrame!!.regionX, currentFrame!!.regionY, currentFrame!!.regionWidth, currentFrame!!.regionHeight, flip, false)
+                objectList[i].sb.end()
+            } else if (objectList[i].type === type.waterway) {
+                val currentFrame = objectList[i].animation.getKeyFrame(stateTime!!, true)
+                if (objectList[i].speed < 0f) {
+                    if (objectList[i].pos.x >= -currentFrame!!.regionWidth * scale - 10)
+                        objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
+                    else
+                        objectList[i].pos.x = 48 * 15 * scale + currentFrame!!.regionWidth * scale
+                } else {
+                    if (objectList[i].pos.x <= 15 * 48 * scale + currentFrame!!.regionWidth * scale + 10)
+                        objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
+                    else
+                        objectList[i].pos.x = -currentFrame!!.regionWidth * scale
+                }
+                objectList[i].sb.begin()
+                objectList[i].sb.draw(currentFrame, objectList[i].pos.x, objectList[i].pos.y, currentFrame!!.regionWidth * scale, currentFrame!!.regionHeight * scale)
+                objectList[i].sb.end()
+            } else if (objectList[i].type === type.bonus) {
+            } else {
+                val currentFrame = objectList[i].animation.getKeyFrame(stateTime!!, true)
+                if (objectList[i].speed < 0f) {
+                    if (objectList[i].pos.x >= -currentFrame!!.regionWidth * scale - 10)
+                        objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
+                    else
+                        objectList[i].pos.x = 48 * 15 * scale + currentFrame!!.regionWidth * scale
+                } else {
+                    if (objectList[i].pos.x <= 15 * 48 * scale + currentFrame!!.regionWidth * scale + 10)
+                        objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
+                    else
+                        objectList[i].pos.x = -currentFrame!!.regionWidth * scale
+                }
+                objectList[i].sb.begin()
+                objectList[i].sb.draw(currentFrame, objectList[i].pos.x, objectList[i].pos.y, currentFrame!!.regionWidth * scale, currentFrame!!.regionHeight * scale)
+                objectList[i].sb.end()
 
             }
-        return objects.toTypedArray()
         }
     }
+}
 

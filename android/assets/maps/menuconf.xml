@@ -1,57 +1,234 @@
 <?xml version="1.0"?>
 <mapsobject>
-    <object>
-        <type>car</type>
-        <model>car1</model>
-        <animation>0</animation>
-        <position>3</position>
-        <count>2</count>
-        <space>5</space>
-        <speed>-1</speed>
-    </object>
-    <object>
-        <type>car</type>
-        <model>car1</model>
-        <animation>0</animation>
-        <position>16</position>
-        <count>2</count>
-        <space>5</space>
-        <speed>-1</speed>
-    </object>
-    <object>
-        <type>car</type>
-        <model>car1</model>
-        <animation>0</animation>
-        <position>29</position>
-        <count>2</count>
-        <space>5</space>
-        <speed>-1</speed>
-    </object>
-    <object>
-        <type>car</type>
-        <model>car2</model>
-        <animation>0</animation>
-        <position>4</position>
-        <count>2</count>
-        <space>5</space>
-        <speed>2</speed>
-    </object>
-    <object>
-        <type>car</type>
-        <model>car2</model>
-        <animation>0</animation>
-        <position>17</position>
-        <count>2</count>
-        <space>5</space>
-        <speed>2</speed>
-    </object>
-    <object>
-        <type>car</type>
-        <model>car2</model>
-        <animation>0</animation>
-        <position>30</position>
-        <count>2</count>
-        <space>5</space>
-        <speed>2</speed>
-    </object>
+    <position id = '3'>
+        <object type='car' model='car1' animation='0' position='0' speed = '-1'/>
+        <object type='car' model='car1' animation='0' position='8' speed = '-1'/>
+    </position>
+    <position id = '4'>
+        <object type='car' model='car2' animation='0' position='0' speed = '2'/>
+        <object type='car' model='car2' animation='0' position='8' speed = '2'/>
+    </position>
+    <position id = '6'>
+        <object type='car' model='car3' animation='0' position='0' speed = '1'/>
+        <object type='car' model='car3' animation='0' position='5' speed = '1'/>
+        <object type='car' model='car3' animation='0' position='12' speed = '1'/>
+    </position>
+    <position id = '5'>
+        <object type='car' model='car4' animation='0' position='0' speed = '-0.5'/>
+        <object type='car' model='car4' animation='0' position='8' speed = '-0.5'/>
+    </position>
+    <position id = '7'>
+        <object type='enemy' model='snake' animation='0' position='0' speed = '-1'/>
+    </position>
+    <position id = '8'>
+        <object type='enemy' model='snake' animation='0' position='8' speed = '-1'/>
+    </position>
+    <position id = '9'>
+        <object type='waterway' model='log' animation='0' position='0' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='1' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='2' speed = '-0.5'/>
+
+
+        <object type='waterway' model='log' animation='0' position='6' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='7' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='8' speed = '-0.5'/>
+
+
+        <object type='waterway' model='log' animation='0' position='12' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='13' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='14' speed = '-0.5'/>
+    </position>
+    <position id = '10'>
+        <object type='waterway' model='turtle_right' animation='0.5' position='0' speed = '1'/>
+        <object type='waterway' model='turtle_right' animation='0.5' position='1' speed = '1'/>
+        <object type='waterway' model='turtle_right' animation='0.5' position='2' speed = '1'/>
+
+
+        <object type='enemy' model='turtle_right_dive' animation='0.5' position='6' speed = '1'/>
+        <object type='enemy' model='turtle_right_dive' animation='0.5' position='7' speed = '1'/>
+        <object type='enemy' model='turtle_right_dive' animation='0.5' position='8' speed = '1'/>
+
+
+        <object type='waterway' model='turtle_right' animation='0.5' position='12' speed = '1'/>
+        <object type='waterway' model='turtle_right' animation='0.5' position='13' speed = '1'/>
+        <object type='waterway' model='turtle_right' animation='0.5' position='14' speed = '1'/>
+    </position>
+    <position id = '11'>
+        <object type='waterway' model='log' animation='0' position='1' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='2' speed = '-0.5'/>
+
+
+        <object type='waterway' model='log' animation='0' position='7' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='8' speed = '-0.5'/>
+
+
+        <object type='waterway' model='log' animation='0' position='13' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='14' speed = '-0.5'/>
+    </position>
+    <position id = '12'>
+        <object type='waterway' model='log' animation='0' position='1' speed = '0.3'/>
+        <object type='waterway' model='log' animation='0' position='2' speed = '0.3'/>
+        <object type='waterway' model='log' animation='0' position='3' speed = '0.3'/>
+        <object type='waterway' model='log' animation='0' position='4' speed = '0.3'/>
+
+        <object type='enemy' model='Alligator_one' animation='2' position='9' speed = '0.3'/>
+        <object type='enemy' model='Alligator_two' animation='2' position='10' speed = '0.3'/>
+        <object type='enemy' model='Alligator_three' animation='2' position='11' speed = '0.3'/>
+        <object type='enemy' model='Alligator_four' animation='2' position='12' speed = '0.3'/>
+        <object type='enemy' model='Alligator_five' animation='2' position='13' speed = '0.3'/>
+    </position>
+    <position id = '16'>
+        <object type='car' model='car1' animation='0' position='0' speed = '-1'/>
+        <object type='car' model='car1' animation='0' position='8' speed = '-1'/>
+    </position>
+    <position id = '17'>
+        <object type='car' model='car2' animation='0' position='0' speed = '2'/>
+        <object type='car' model='car2' animation='0' position='8' speed = '2'/>
+    </position>
+    <position id = '19'>
+        <object type='car' model='car3' animation='0' position='0' speed = '1'/>
+        <object type='car' model='car3' animation='0' position='5' speed = '1'/>
+        <object type='car' model='car3' animation='0' position='12' speed = '1'/>
+    </position>
+    <position id = '18'>
+        <object type='car' model='car4' animation='0' position='0' speed = '-0.5'/>
+        <object type='car' model='car4' animation='0' position='8' speed = '-0.5'/>
+    </position>
+    <position id = '20'>
+        <object type='enemy' model='snake' animation='0' position='0' speed = '-1'/>
+    </position>
+    <position id = '21'>
+        <object type='enemy' model='snake' animation='0' position='8' speed = '-1'/>
+    </position>
+    <position id = '22'>
+        <object type='waterway' model='log' animation='0' position='0' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='1' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='2' speed = '-0.5'/>
+
+
+        <object type='waterway' model='log' animation='0' position='6' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='7' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='8' speed = '-0.5'/>
+
+
+        <object type='waterway' model='log' animation='0' position='12' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='13' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='14' speed = '-0.5'/>
+    </position>
+    <position id = '23'>
+        <object type='waterway' model='turtle_right' animation='0.5' position='0' speed = '1'/>
+        <object type='waterway' model='turtle_right' animation='0.5' position='1' speed = '1'/>
+        <object type='waterway' model='turtle_right' animation='0.5' position='2' speed = '1'/>
+
+
+        <object type='enemy' model='turtle_right_dive' animation='0.5' position='6' speed = '1'/>
+        <object type='enemy' model='turtle_right_dive' animation='0.5' position='7' speed = '1'/>
+        <object type='enemy' model='turtle_right_dive' animation='0.5' position='8' speed = '1'/>
+
+
+        <object type='waterway' model='turtle_right' animation='0.5' position='12' speed = '1'/>
+        <object type='waterway' model='turtle_right' animation='0.5' position='13' speed = '1'/>
+        <object type='waterway' model='turtle_right' animation='0.5' position='14' speed = '1'/>
+    </position>
+    <position id = '24'>
+        <object type='waterway' model='log' animation='0' position='1' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='2' speed = '-0.5'/>
+
+
+        <object type='waterway' model='log' animation='0' position='7' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='8' speed = '-0.5'/>
+
+
+        <object type='waterway' model='log' animation='0' position='13' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='14' speed = '-0.5'/>
+    </position>
+    <position id = '25'>
+        <object type='waterway' model='log' animation='0' position='1' speed = '0.3'/>
+        <object type='waterway' model='log' animation='0' position='2' speed = '0.3'/>
+        <object type='waterway' model='log' animation='0' position='3' speed = '0.3'/>
+        <object type='waterway' model='log' animation='0' position='4' speed = '0.3'/>
+
+        <object type='enemy' model='Alligator_one' animation='2' position='9' speed = '0.3'/>
+        <object type='enemy' model='Alligator_two' animation='2' position='10' speed = '0.3'/>
+        <object type='enemy' model='Alligator_three' animation='2' position='11' speed = '0.3'/>
+        <object type='enemy' model='Alligator_four' animation='2' position='12' speed = '0.3'/>
+        <object type='enemy' model='Alligator_five' animation='2' position='13' speed = '0.3'/>
+    </position>
+    <position id = '29'>
+        <object type='car' model='car1' animation='0' position='0' speed = '-1'/>
+        <object type='car' model='car1' animation='0' position='8' speed = '-1'/>
+    </position>
+    <position id = '30'>
+        <object type='car' model='car2' animation='0' position='0' speed = '2'/>
+        <object type='car' model='car2' animation='0' position='8' speed = '2'/>
+    </position>
+    <position id = '32'>
+        <object type='car' model='car3' animation='0' position='0' speed = '1'/>
+        <object type='car' model='car3' animation='0' position='5' speed = '1'/>
+        <object type='car' model='car3' animation='0' position='12' speed = '1'/>
+    </position>
+    <position id = '31'>
+        <object type='car' model='car4' animation='0' position='0' speed = '-0.5'/>
+        <object type='car' model='car4' animation='0' position='8' speed = '-0.5'/>
+    </position>
+    <position id = '33'>
+        <object type='enemy' model='snake' animation='0' position='0' speed = '-1'/>
+    </position>
+    <position id = '34'>
+        <object type='enemy' model='snake' animation='0' position='8' speed = '-1'/>
+    </position>
+    <position id = '35'>
+        <object type='waterway' model='log' animation='0' position='0' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='1' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='2' speed = '-0.5'/>
+
+
+        <object type='waterway' model='log' animation='0' position='6' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='7' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='8' speed = '-0.5'/>
+
+
+        <object type='waterway' model='log' animation='0' position='12' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='13' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='14' speed = '-0.5'/>
+    </position>
+    <position id = '36'>
+        <object type='waterway' model='turtle_right' animation='0.5' position='0' speed = '1'/>
+        <object type='waterway' model='turtle_right' animation='0.5' position='1' speed = '1'/>
+        <object type='waterway' model='turtle_right' animation='0.5' position='2' speed = '1'/>
+
+
+        <object type='enemy' model='turtle_right_dive' animation='0.5' position='6' speed = '1'/>
+        <object type='enemy' model='turtle_right_dive' animation='0.5' position='7' speed = '1'/>
+        <object type='enemy' model='turtle_right_dive' animation='0.5' position='8' speed = '1'/>
+
+
+        <object type='waterway' model='turtle_right' animation='0.5' position='12' speed = '1'/>
+        <object type='waterway' model='turtle_right' animation='0.5' position='13' speed = '1'/>
+        <object type='waterway' model='turtle_right' animation='0.5' position='14' speed = '1'/>
+    </position>
+    <position id = '37'>
+        <object type='waterway' model='log' animation='0' position='1' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='2' speed = '-0.5'/>
+
+
+        <object type='waterway' model='log' animation='0' position='7' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='8' speed = '-0.5'/>
+
+
+        <object type='waterway' model='log' animation='0' position='13' speed = '-0.5'/>
+        <object type='waterway' model='log' animation='0' position='14' speed = '-0.5'/>
+    </position>
+    <position id = '38'>
+        <object type='waterway' model='log' animation='0' position='1' speed = '0.3'/>
+        <object type='waterway' model='log' animation='0' position='2' speed = '0.3'/>
+        <object type='waterway' model='log' animation='0' position='3' speed = '0.3'/>
+        <object type='waterway' model='log' animation='0' position='4' speed = '0.3'/>
+
+        <object type='enemy' model='Alligator_one' animation='2' position='9' speed = '0.3'/>
+        <object type='enemy' model='Alligator_two' animation='2' position='10' speed = '0.3'/>
+        <object type='enemy' model='Alligator_three' animation='2' position='11' speed = '0.3'/>
+        <object type='enemy' model='Alligator_four' animation='2' position='12' speed = '0.3'/>
+        <object type='enemy' model='Alligator_five' animation='2' position='13' speed = '0.3'/>
+    </position>
 </mapsobject>

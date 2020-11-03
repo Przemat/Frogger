@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.mygdx.frogger.Models.ReadObjects
-import com.mygdx.frogger.Models.xml
 import com.mygdx.frogger.MyGame
 
 
@@ -28,10 +27,9 @@ class MenuScreen//myGame.setScreen(GameScreen(myGame))
     var posCamera: Vector3 = Vector3(Gdx.graphics.width.toFloat() / 2, Gdx.graphics.height.toFloat() / 2, 0f)
     var scale: Float = Gdx.graphics.width.toFloat() / 720
 
-    var stateTime: Float? = null
+
 
     val readObjects: ReadObjects
-    var objectList: Array<xml>
 
     private var stage: Stage? = null
 
@@ -42,10 +40,10 @@ class MenuScreen//myGame.setScreen(GameScreen(myGame))
         camera = OrthographicCamera()
         camera!!.setToOrtho(false, w, h)
         camera!!.update()
-        stateTime = 0f
+
         val path = Gdx.files.internal("maps/menuconf.xml")
         readObjects = ReadObjects(path)
-        objectList = readObjects.getObjects()
+
         tiledMap = TmxMapLoader().load("maps/menu.tmx")
         tiledMapRenderer = OrthogonalTiledMapRenderer(tiledMap, scale)
         val title = Label("Frogger", myGame.gameSkin)
@@ -98,28 +96,7 @@ class MenuScreen//myGame.setScreen(GameScreen(myGame))
         posCamera.y += 100f * Gdx.graphics.deltaTime
     }
 
-    private fun draw() {
-        stateTime = stateTime?.plus(Gdx.graphics.deltaTime)
-        //
-        for (i in 0..objectList.size - 1) {
-            val currentFrame = objectList[i].animation.getKeyFrame(stateTime!!, true)
-            if (objectList[i].speed < 0) {
-                if (objectList[i].pos.x >= -currentFrame!!.regionWidth*scale-10)
-                    objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
-                else
-                    objectList[i].pos.x = 48 * 15 * scale
-            } else {
-                if (objectList[i].pos.x <= 15 * 48 *scale+10)
-                    objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
-                else
-                    objectList[i].pos.x = -currentFrame!!.regionWidth * scale
-            }
-            objectList[i].sb.projectionMatrix = camera!!.combined
-            objectList[i].sb.begin()
-            objectList[i].sb.draw(currentFrame, objectList[i].pos.x, objectList[i].pos.y, currentFrame!!.regionWidth * scale, currentFrame!!.regionHeight * scale)
-            objectList[i].sb.end()
-        }
-    }
+
 
     override fun render(delta: Float) {
         Gdx.gl.glClearColor(1f, 1f, 1f, 1f)
@@ -132,7 +109,7 @@ class MenuScreen//myGame.setScreen(GameScreen(myGame))
         tiledMapRenderer!!.setView(camera)
         tiledMapRenderer!!.render()
 
-        draw()
+        readObjects.draw(camera!!)
         stage!!.act()
         stage!!.draw()
     }

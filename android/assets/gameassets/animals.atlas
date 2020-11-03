@@ -1,249 +1,305 @@
 animals.png
-size: 250, 439
+size: 480, 384
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-Alligator
+Alligator_one
   rotate: false
-  xy: 1, 390
-  size: 240, 48
-  orig: 240, 48
-  offset: 0, 0
-  index: 1
-Alligator
-  rotate: false
-  xy: 1, 390
-  size: 240, 48
-  orig: 240, 48
-  offset: 0, 0
-  index: 2
-Alligator_head
-  rotate: false
-  xy: 51, 210
-  size: 46, 34
-  orig: 48, 48
-  offset: 1, 8
-  index: -1
-bfrog_up_stay
-  rotate: false
-  xy: 48, 144
+  xy: 0, 0
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 1
-bfrog_up_stay
+Alligator_one
   rotate: false
-  xy: 288, 96
+  xy: 240, 0
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 2
-bfrog_up_stay
+Alligator_two
   rotate: false
-  xy: 240, 96
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 3
-bfrog_up_stay
-  rotate: false
-  xy: 288, 96
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 4
-bfrog_down_stay
-  rotate: false
-  xy: 96, 48
+  xy: 48, 0
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 1
-bfrog_down_stay
+Alligator_two
   rotate: false
-  xy: 320, 0
+  xy: 288, 0
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 2
-bfrog_down_stay
+Alligator_three
   rotate: false
-  xy: 272, 0
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 3
-bfrog_down_stay
-  rotate: false
-  xy: 320, 0
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 4
-bfrog_left_stay
-  rotate: false
-  xy: 96, 48
+  xy: 96, 0
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 1
-bfrog_left_stay
+Alligator_three
   rotate: false
-  xy: 192, 48
+  xy: 336, 0
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+Alligator_four
+  rotate: false
+  xy: 144, 0
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 1
+Alligator_four
+  rotate: false
+  xy: 384, 0
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+Alligator_five
+  rotate: false
+  xy: 192, 0
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 1
+Alligator_five
+  rotate: false
+  xy: 432, 0
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 2
-bfrog_left_stay
-  rotate: false
-  xy: 144, 48
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 3
-bfrog_left_stay
-  rotate: false
-  xy: 192, 48
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 4
-bfrog_right_stay
-  rotate: false
-  xy: 192, 96
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 1
-bfrog_right_stay
-  rotate: false
-  xy: 48, 96
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 2
-bfrog_right_stay
-  rotate: false
-  xy: 0, 96
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 3
-bfrog_right_stay
-  rotate: false
-  xy: 48, 96
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 4
-bfrog_up_jump
-  rotate: false
-  xy: 48, 144
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 1
-bfrog_up_jump
-  rotate: false
-  xy: 0, 144
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 2
-bfrog_up_jump
-  rotate: false
-  xy: 48, 144
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 3
-bfrog_down_jump
-  rotate: false
-  xy: 96, 48
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 1
-bfrog_down_jump
-  rotate: false
-  xy: 48, 48
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 2
-bfrog_down_jump
-  rotate: false
-  xy: 96, 48
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 3
-bfrog_left_jump
-  rotate: false
-  xy: 336, 48
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 1
-bfrog_left_jump
-  rotate: false
-  xy: 288, 48
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 2
-bfrog_left_jump
-  rotate: false
-  xy: 336, 48
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 3
-bfrog_right_jump
-  rotate: false
-  xy: 192, 96
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 1
-bfrog_right_jump
-  rotate: false
-  xy: 144, 96
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 2
-bfrog_right_jump
-  rotate: false
-  xy: 192, 96
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 3
-bfrog_down_dead
+Alligator_head
   rotate: false
   xy: 0, 48
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
-bfrog_left_dead
+bfrog_up_stay
+  rotate: false
+  xy: 0, 144
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 1
+bfrog_up_stay
+  rotate: false
+  xy: 336, 96
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+bfrog_up_stay
+  rotate: false
+  xy: 288, 96
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 3
+bfrog_up_stay
+  rotate: false
+  xy: 336, 96
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 4
+bfrog_down_stay
   rotate: false
   xy: 240, 48
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 1
+bfrog_down_stay
+  rotate: false
+  xy: 96, 48
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+bfrog_down_stay
+  rotate: false
+  xy: 48, 48
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 3
+bfrog_down_stay
+  rotate: false
+  xy: 96, 48
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 4
+bfrog_left_stay
+  rotate: false
+  xy: 0, 96
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 1
+bfrog_left_stay
+  rotate: false
+  xy: 336, 48
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+bfrog_left_stay
+  rotate: false
+  xy: 288, 48
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 3
+bfrog_left_stay
+  rotate: false
+  xy: 336, 48
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 4
+bfrog_right_stay
+  rotate: false
+  xy: 240, 96
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 1
+bfrog_right_stay
+  rotate: false
+  xy: 96, 96
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+bfrog_right_stay
+  rotate: false
+  xy: 48, 96
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 3
+bfrog_right_stay
+  rotate: false
+  xy: 96, 96
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 4
+bfrog_up_jump
+  rotate: false
+  xy: 0, 144
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 1
+bfrog_up_jump
+  rotate: false
+  xy: 432, 96
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+bfrog_up_jump
+  rotate: false
+  xy: 0, 144
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 3
+bfrog_down_jump
+  rotate: false
+  xy: 240, 48
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 1
+bfrog_down_jump
+  rotate: false
+  xy: 192, 48
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+bfrog_down_jump
+  rotate: false
+  xy: 240, 48
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 3
+bfrog_left_jump
+  rotate: false
+  xy: 0, 96
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 1
+bfrog_left_jump
+  rotate: false
+  xy: 432, 48
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+bfrog_left_jump
+  rotate: false
+  xy: 0, 96
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 3
+bfrog_right_jump
+  rotate: false
+  xy: 240, 96
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 1
+bfrog_right_jump
+  rotate: false
+  xy: 192, 96
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+bfrog_right_jump
+  rotate: false
+  xy: 240, 96
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 3
+bfrog_down_dead
+  rotate: false
+  xy: 144, 48
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+bfrog_left_dead
+  rotate: false
+  xy: 384, 48
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 bfrog_right_dead
   rotate: false
-  xy: 96, 96
+  xy: 144, 96
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 bfrog_up_dead
   rotate: false
-  xy: 336, 96
+  xy: 384, 96
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
@@ -285,98 +341,98 @@ fly
   index: 3
 frog_up_stay
   rotate: false
-  xy: 144, 288
+  xy: 288, 240
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 1
 frog_up_stay
   rotate: false
-  xy: 0, 288
+  xy: 144, 240
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 2
 frog_up_stay
   rotate: false
-  xy: 336, 240
+  xy: 96, 240
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 3
 frog_up_stay
   rotate: false
-  xy: 0, 288
+  xy: 144, 240
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 4
 frog_down_stay
   rotate: false
-  xy: 144, 192
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 1
-frog_down_stay
-  rotate: false
   xy: 0, 192
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
-  index: 2
+  index: 1
 frog_down_stay
   rotate: false
   xy: 336, 144
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
+  index: 2
+frog_down_stay
+  rotate: false
+  xy: 288, 144
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
   index: 3
 frog_down_stay
   rotate: false
-  xy: 0, 192
+  xy: 336, 144
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 4
 frog_left_stay
   rotate: false
-  xy: 48, 240
+  xy: 288, 192
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 1
 frog_left_stay
   rotate: false
-  xy: 288, 192
+  xy: 144, 192
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 2
 frog_left_stay
   rotate: false
-  xy: 240, 192
+  xy: 96, 192
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 3
 frog_left_stay
   rotate: false
-  xy: 288, 192
+  xy: 144, 192
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 4
 frog_right_stay
   rotate: false
-  xy: 288, 240
+  xy: 48, 240
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 1
 frog_right_stay
   rotate: false
-  xy: 144, 240
+  xy: 384, 192
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
@@ -390,190 +446,253 @@ frog_right_stay
   index: 3
 frog_right_stay
   rotate: false
-  xy: 144, 240
+  xy: 336, 192
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 4
 frog_up_jump
   rotate: false
-  xy: 144, 288
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 1
-frog_up_jump
-  rotate: false
-  xy: 96, 288
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 2
-frog_up_jump
-  rotate: false
-  xy: 144, 288
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 3
-frog_down_jump
-  rotate: false
-  xy: 144, 192
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 1
-frog_down_jump
-  rotate: false
-  xy: 96, 192
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 2
-frog_down_jump
-  rotate: false
-  xy: 144, 192
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 3
-frog_left_jump
-  rotate: false
-  xy: 48, 240
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 1
-frog_left_jump
-  rotate: false
-  xy: 0, 240
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 2
-frog_left_jump
-  rotate: false
-  xy: 48, 240
-  size: 48, 48
-  orig: 48, 48
-  offset: 0, 0
-  index: 3
-frog_right_jump
-  rotate: false
   xy: 288, 240
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 1
-frog_right_jump
+frog_up_jump
   rotate: false
   xy: 240, 240
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 2
-frog_right_jump
+frog_up_jump
   rotate: false
   xy: 288, 240
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: 3
+frog_down_jump
+  rotate: false
+  xy: 0, 192
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 1
+frog_down_jump
+  rotate: false
+  xy: 432, 144
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+frog_down_jump
+  rotate: false
+  xy: 0, 192
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 3
+frog_left_jump
+  rotate: false
+  xy: 288, 192
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 1
+frog_left_jump
+  rotate: false
+  xy: 240, 192
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+frog_left_jump
+  rotate: false
+  xy: 288, 192
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 3
+frog_right_jump
+  rotate: false
+  xy: 48, 240
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 1
+frog_right_jump
+  rotate: false
+  xy: 0, 240
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+frog_right_jump
+  rotate: false
+  xy: 48, 240
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 3
 frog_down_dead
   rotate: false
-  xy: 48, 192
+  xy: 384, 144
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 frog_left_dead
   rotate: false
-  xy: 336, 192
+  xy: 192, 192
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 frog_right_dead
   rotate: false
-  xy: 192, 240
+  xy: 432, 192
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 frog_up_dead
   rotate: false
-  xy: 48, 288
+  xy: 192, 240
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
   index: -1
 log
   rotate: false
-  xy: 51, 246
-  size: 48, 46
+  xy: 336, 240
+  size: 48, 48
   orig: 48, 48
-  offset: 0, 1
+  offset: 0, 0
   index: -1
 snake
   rotate: false
-  xy: 81, 163
-  size: 46, 29
+  xy: 384, 240
+  size: 48, 48
   orig: 48, 48
-  offset: 2, 1
+  offset: 0, 0
   index: 1
 snake
   rotate: false
-  xy: 1, 210
-  size: 48, 31
+  xy: 432, 240
+  size: 48, 48
   orig: 48, 48
-  offset: 0, 1
+  offset: 0, 0
   index: 2
 snake
   rotate: false
-  xy: 129, 163
-  size: 48, 28
+  xy: 0, 288
+  size: 48, 48
   orig: 48, 48
-  offset: 0, 2
+  offset: 0, 0
   index: 3
 turtle_left
   rotate: false
-  xy: 153, 125
-  size: 35, 36
+  xy: 48, 288
+  size: 48, 48
   orig: 48, 48
-  offset: 13, 6
+  offset: 0, 0
   index: 1
 turtle_left
   rotate: false
-  xy: 93, 1
-  size: 31, 27
+  xy: 96, 288
+  size: 48, 48
   orig: 48, 48
-  offset: 13, 11
+  offset: 0, 0
   index: 2
 turtle_left
   rotate: false
-  xy: 1, 91
-  size: 36, 26
+  xy: 144, 288
+  size: 48, 48
   orig: 48, 48
-  offset: 12, 11
+  offset: 0, 0
   index: 3
 turtle_right
   rotate: false
-  xy: 190, 125
-  size: 35, 36
+  xy: 288, 288
+  size: 48, 48
   orig: 48, 48
-  offset: 0, 6
+  offset: 0, 0
   index: 1
 turtle_right
   rotate: false
-  xy: 126, 1
-  size: 31, 27
+  xy: 336, 288
+  size: 48, 48
   orig: 48, 48
-  offset: 4, 11
+  offset: 0, 0
   index: 2
 turtle_right
   rotate: false
-  xy: 39, 91
-  size: 36, 26
+  xy: 384, 288
+  size: 48, 48
   orig: 48, 48
-  offset: 0, 11
+  offset: 0, 0
   index: 3
+turtle_left_dive
+  rotate: false
+  xy: 48, 288
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 1
+turtle_left_dive
+  rotate: false
+  xy: 144, 288
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+turtle_left_dive
+  rotate: false
+  xy: 192, 288
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 3
+turtle_left_dive
+  rotate: false
+  xy: 240, 288
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 4
+turtle_right_dive
+  rotate: false
+  xy: 384, 288
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 1
+turtle_right_dive
+  rotate: false
+  xy: 288, 288
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 2
+turtle_right_dive
+  rotate: false
+  xy: 432, 288
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 3
+turtle_right_dive
+  rotate: false
+  xy: 0, 336
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 4
+turtle_right_dive
+  rotate: false
+  xy: 48, 336
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: 5
