@@ -131,8 +131,10 @@ class ReadObjects(level: FileHandle) {
                 objectList[i].sb.end()
             } else if (objectList[i].type === type.bonus) {
             } else {
+                var flip = false
                 val currentFrame = objectList[i].animation.getKeyFrame(stateTime!!, true)
                 if (objectList[i].speed < 0f) {
+                    flip = true
                     if (objectList[i].pos.x >= -currentFrame!!.regionWidth * scale - 10)
                         objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
                     else
@@ -144,9 +146,8 @@ class ReadObjects(level: FileHandle) {
                         objectList[i].pos.x = -currentFrame!!.regionWidth * scale
                 }
                 objectList[i].sb.begin()
-                objectList[i].sb.draw(currentFrame, objectList[i].pos.x, objectList[i].pos.y, currentFrame!!.regionWidth * scale, currentFrame!!.regionHeight * scale)
+                objectList[i].sb.draw(currentFrame!!.texture, objectList[i].pos.x, objectList[i].pos.y, currentFrame!!.regionWidth * scale, currentFrame!!.regionHeight * scale, currentFrame!!.regionX, currentFrame!!.regionY, currentFrame!!.regionWidth, currentFrame!!.regionHeight, flip, false)
                 objectList[i].sb.end()
-
             }
         }
     }

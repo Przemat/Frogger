@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<mapsobject>
+    <position id = '3'>
+        <object type='car' model='car1' animation='0' position='0' speed = '-1'/>
+        <object type='car' model='car1' animation='0' position='8' speed = '-1'/>
+    </position>
+    <position id = '4'>
+        <object type='car' model='car2' animation='0' position='0' speed = '2'/>
+        <object type='car' model='car2' animation='0' position='8' speed = '2'/>
+    </position>
+    <position id = '6'>
+        <object type='car' model='car3' animation='0' position='0' speed = '1'/>
+        <object type='car' model='car3' animation='0' position='5' speed = '1'/>
+        <object type='car' model='car3' animation='0' position='12' speed = '1'/>
+    </position>
+    <position id = '5'>
+        <object type='car' model='car4' animation='0' position='0' speed = '-0.5'/>
+        <object type='car' model='car4' animation='0' position='8' speed = '-0.5'/>
+    </position>
+    <position id = '7'>
+        <object type='enemy' model='snake' animation='0' position='0' speed = '-1'/>
+    </position>
+    <position id = '8'>
+        <object type='enemy' model='snake' animation='0' position='8' speed = '-1'/>
+    </position>
+
+</mapsobject>

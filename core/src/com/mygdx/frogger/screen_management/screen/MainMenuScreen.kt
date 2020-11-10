@@ -1,9 +1,9 @@
-package com.mygdx.frogger.Screen.Loading
+package com.mygdx.frogger.screen_management.screen
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL30
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
@@ -11,77 +11,75 @@ import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton
-import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.mygdx.frogger.Models.ReadObjects
-import com.mygdx.frogger.MyGame
+import com.mygdx.frogger.config.GameConfig
+import com.mygdx.frogger.screen_management.util.ScreenEnum
+import com.mygdx.frogger.screen_management.util.UIFactory
 
 
-class MenuScreen//myGame.setScreen(GameScreen(myGame))
-(myGame: MyGame) : Screen {
+class MainMenuScreen : AbstractScreen() {
     var tiledMap: TiledMap? = null
     var camera: OrthographicCamera? = null
     var tiledMapRenderer: OrthogonalTiledMapRenderer? = null
     var posCamera: Vector3 = Vector3(Gdx.graphics.width.toFloat() / 2, Gdx.graphics.height.toFloat() / 2, 0f)
     var scale: Float = Gdx.graphics.width.toFloat() / 720
-
-
+    var logo: Texture
+    var exittex: Texture
+    var playtex: Texture
+    var gameConfig: GameConfig
+    var uiFactory: UIFactory
 
     val readObjects: ReadObjects
-
     private var stage: Stage? = null
 
     init {
         stage = Stage(ScreenViewport())
+        gameConfig = GameConfig()
+        uiFactory = UIFactory()
+        camera = OrthographicCamera()
+        val path = Gdx.files.internal("maps/menuconf.xml")
+        readObjects = ReadObjects(path)
+        tiledMap = TmxMapLoader().load("maps/menu.tmx")
+        logo = Texture(Gdx.files.internal("gui/logo.png"))
+        exittex = Texture(Gdx.files.internal("gui/exit.png"))
+        playtex = Texture(Gdx.files.internal("gui/play.png"))
+    }
+    override fun buildStage() {
         val w = Gdx.graphics.width.toFloat()
         val h = Gdx.graphics.height.toFloat()
-        camera = OrthographicCamera()
         camera!!.setToOrtho(false, w, h)
         camera!!.update()
 
-        val path = Gdx.files.internal("maps/menuconf.xml")
-        readObjects = ReadObjects(path)
-
-        tiledMap = TmxMapLoader().load("maps/menu.tmx")
         tiledMapRenderer = OrthogonalTiledMapRenderer(tiledMap, scale)
-        val title = Label("Frogger", myGame.gameSkin)
-        title.setAlignment(Align.center)
+
+        val title = Image(logo)
+        title.scaleX = scale
+        title.scaleY = scale
         title.setY((Gdx.graphics.height * 2 / 3).toFloat())
-        title.width = Gdx.graphics.width.toFloat()
-        title.setFontScale(Gdx.graphics.width.toFloat() / 100)
+        title.setX((Gdx.graphics.width / 2f - title.width))
         stage!!.addActor(title)
-        val playButton = TextButton("Play!", myGame.gameSkin)
-        playButton.setSize(Gdx.graphics.width.toFloat() / 2, Gdx.graphics.width.toFloat() / 4)
-        playButton.setPosition(Gdx.graphics.width.toFloat() / 2 - playButton.width / 2, Gdx.graphics.height.toFloat() / 2 - playButton.height / 2)
-        playButton.label.setFontScale(Gdx.graphics.width.toFloat() / 100)
-        playButton.addListener(object : InputListener() {
-            override fun touchUp(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int) {
-                //myGame.setScreen(GameScreen(myGame))
-                title.setText("Dziala")
-            }
-
-            override fun touchDown(event: InputEvent?, x: Float, y: Float, pointer: Int, button: Int): Boolean {
-                title.setText("Frogger")
-                return true
-            }
-        })
+        val playButton: ImageButton = uiFactory.createButton(playtex)
+        playButton.image.setFillParent(true)
+        playButton.setSize(playtex.width*scale, playtex.height*scale)
+        playButton.setPosition(0f, Gdx.graphics.height.toFloat() / 2 - playButton.height)
+        playButton.addListener(uiFactory.createListener(ScreenEnum.LEVEL_SELECT, 0))
         stage!!.addActor(playButton)
-    }
-
-    /* private fun readXml(): Document {
-         val xmlFile = File("maps/menuconf.xml")
-         val dbFactory = DocumentBuilderFactory.newInstance()
-         val dBuilder = dbFactory.newDocumentBuilder()
-         val xmlInput = InputSource(StringReader(xmlFile.readText()))
-         val doc = dBuilder.parse(xmlInput)
-         doc.documentElement.normalize()
-         return doc
-     }*/
-
-    override fun hide() {
-        TODO("Not yet implemented")
+        val exitButton: ImageButton = uiFactory.createButton(exittex)
+        exitButton.image.setFillParent(true)
+        exitButton.setSize(exittex.width*scale, exittex.height*scale )
+        exitButton.setPosition(0f, Gdx.graphics.height.toFloat() / 3 - playButton.height)
+        exitButton.addListener(
+                object : InputListener() {
+                    override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {
+                        Gdx.app.exit()
+                        return false
+                    }
+                })
+        stage!!.addActor(exitButton)
     }
 
     override fun show() {
@@ -95,8 +93,6 @@ class MenuScreen//myGame.setScreen(GameScreen(myGame))
         }
         posCamera.y += 100f * Gdx.graphics.deltaTime
     }
-
-
 
     override fun render(delta: Float) {
         Gdx.gl.glClearColor(1f, 1f, 1f, 1f)
@@ -114,19 +110,14 @@ class MenuScreen//myGame.setScreen(GameScreen(myGame))
         stage!!.draw()
     }
 
-    override fun pause() {
-        TODO("Not yet implemented")
-    }
-
-    override fun resume() {
-        TODO("Not yet implemented")
-    }
-
     override fun resize(width: Int, height: Int) {
     }
 
     override fun dispose() {
         stage!!.dispose()
+        tiledMapRenderer!!.dispose()
+        tiledMap!!.dispose()
+        logo.dispose()
     }
 
 }
