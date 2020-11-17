@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.XmlReader
 import java.lang.Enum
@@ -26,8 +27,7 @@ class ReadObjects(level: FileHandle) {
 
     init {
         stateTime = 0f
-        val xmlList = readXml()
-        readList = xmlList
+        readList = readXml()
         carAtlas = TextureAtlas(Gdx.files.internal("gameassets/cars.atlas"))
         textureAtlas = TextureAtlas(Gdx.files.internal("gameassets/animals.atlas"))
         objectList = getObjects()
@@ -40,16 +40,34 @@ class ReadObjects(level: FileHandle) {
         val objects = xmlroot.getChildrenByName("position")
         return objects
     }
+    fun readEnv(): Array<Rectangle> {
+        val reader = XmlReader()
+        val xmlroot = reader.parse(level)
+        val objects = xmlroot.getChildrenByName("environment")
+        var envArray = mutableListOf<Rectangle>()
+        for (item in objects) {
+            val elem = item
+            Gdx.app.log("size", elem.childCount.toString())
+            for (j in 0..elem.childCount - 1) {
+                val curobj = elem.getChild(j)
+                var rectangle: Rectangle
+                rectangle = Rectangle(0f,curobj.getIntAttribute("down").toFloat()*48*scale, Gdx.graphics.width.toFloat(),
+                        curobj.getIntAttribute("height").toFloat()*48*scale)
+                    envArray.add(rectangle)
+                }
+        }
+        return envArray.toTypedArray()
+    }
+
 
     @JvmName("getObjects1")
     fun getObjects(): Array<xml> {
-        var objects: MutableList<xml> = arrayListOf()
+        val objects: MutableList<xml> = arrayListOf()
         for (item in readList!!) {
             val elem = item
             var atlas: TextureAtlas
             val pos = item.getFloatAttribute("id")
             for (j in 0..elem.childCount - 1) {
-
                 val curobj = elem.getChild(j)
                 if (curobj.getAttribute("type") == "car") {
                     atlas = carAtlas
@@ -88,32 +106,12 @@ class ReadObjects(level: FileHandle) {
         return objects.toTypedArray()
     }
 
-    fun draw(camera: OrthographicCamera) {
+    fun drawback(camera: OrthographicCamera) {
         stateTime = stateTime?.plus(Gdx.graphics.deltaTime)
 
         for (i in 0..objectList.size - 1) {
             objectList[i].sb.projectionMatrix = camera!!.combined
-            if (objectList[i].type == type.car) {
-                var flip = false
-                val currentFrame = objectList[i].animation.getKeyFrame(stateTime!!, true)
-
-                if (objectList[i].speed < 0f) {
-                    if (objectList[i].pos.x >= -currentFrame!!.regionWidth * scale - 10)
-                        objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
-                    else
-                        objectList[i].pos.x = 48 * 15 * scale
-                } else {
-                    flip = true
-                    if (objectList[i].pos.x <= 15 * 48 * scale + 10)
-                        objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
-                    else
-                        objectList[i].pos.x = -currentFrame!!.regionWidth * scale
-                }
-
-                objectList[i].sb.begin()
-                objectList[i].sb.draw(currentFrame!!.texture, objectList[i].pos.x, objectList[i].pos.y, currentFrame!!.regionWidth * scale, currentFrame!!.regionHeight * scale, currentFrame!!.regionX, currentFrame!!.regionY, currentFrame!!.regionWidth, currentFrame!!.regionHeight, flip, false)
-                objectList[i].sb.end()
-            } else if (objectList[i].type === type.waterway) {
+            if (objectList[i].type === type.waterway) {
                 val currentFrame = objectList[i].animation.getKeyFrame(stateTime!!, true)
                 if (objectList[i].speed < 0f) {
                     if (objectList[i].pos.x >= -currentFrame!!.regionWidth * scale - 10)
@@ -130,7 +128,7 @@ class ReadObjects(level: FileHandle) {
                 objectList[i].sb.draw(currentFrame, objectList[i].pos.x, objectList[i].pos.y, currentFrame!!.regionWidth * scale, currentFrame!!.regionHeight * scale)
                 objectList[i].sb.end()
             } else if (objectList[i].type === type.bonus) {
-            } else {
+            } else if (objectList[i].type === type.enemy) {
                 var flip = false
                 val currentFrame = objectList[i].animation.getKeyFrame(stateTime!!, true)
                 if (objectList[i].speed < 0f) {
@@ -150,6 +148,39 @@ class ReadObjects(level: FileHandle) {
                 objectList[i].sb.end()
             }
         }
+    }
+
+    fun drawfront(camera: OrthographicCamera) {
+        stateTime = stateTime?.plus(Gdx.graphics.deltaTime)
+
+        for (i in 0..objectList.size - 1) {
+            objectList[i].sb.projectionMatrix = camera.combined
+            if (objectList[i].type == type.car) {
+                var flip = false
+                val currentFrame = objectList[i].animation.getKeyFrame(stateTime!!, true)
+
+                if (objectList[i].speed < 0f) {
+                    if (objectList[i].pos.x >= -currentFrame!!.regionWidth * scale - 10)
+                        objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
+                    else
+                        objectList[i].pos.x = 48 * 15 * scale
+                } else {
+                    flip = true
+                    if (objectList[i].pos.x <= 15 * 48 * scale + 10)
+                        objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
+                    else
+                        objectList[i].pos.x = -currentFrame!!.regionWidth * scale
+                }
+                objectList[i].sb.begin()
+                objectList[i].sb.draw(currentFrame!!.texture, objectList[i].pos.x, objectList[i].pos.y, currentFrame!!.regionWidth * scale, currentFrame!!.regionHeight * scale, currentFrame!!.regionX, currentFrame!!.regionY, currentFrame!!.regionWidth, currentFrame!!.regionHeight, flip, false)
+                objectList[i].sb.end()
+            }
+        }
+    }
+
+    @JvmName("getObjectList1")
+    fun getObjectList(): Array<xml> {
+        return objectList
     }
 }
 

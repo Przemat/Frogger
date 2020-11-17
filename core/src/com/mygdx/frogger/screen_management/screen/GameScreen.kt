@@ -4,18 +4,23 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL30
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.input.GestureDetector
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.mygdx.frogger.Models.CollisionDetector
+import com.mygdx.frogger.Models.PlayerDirection
 import com.mygdx.frogger.Models.ReadObjects
 import com.mygdx.frogger.config.GameConfig
+import com.mygdx.frogger.screen_management.util.PlayerController
 import com.mygdx.frogger.screen_management.util.UIFactory
 
-class GameScreen(level: Int) : AbstractScreen() {
+class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener {
 
     val level = level
     var tiledMap: TiledMap
@@ -25,11 +30,18 @@ class GameScreen(level: Int) : AbstractScreen() {
     var scale: Float = Gdx.graphics.width.toFloat() / 720
     var settingtex: Texture
     var uiFactory: UIFactory
+    var gestureDetector: GestureDetector
 
-    //val readObjects: ReadObjects
     var gameConfig: GameConfig
     val readObjects: ReadObjects
+    var collisionDetector: CollisionDetector
     private var stage: Stage
+    val setting: ImageButton
+
+    //touch
+    var start_pos = Vector3(0f, 0f, 0f)
+    var player: PlayerController
+
 
     init {
         gameConfig = GameConfig()
@@ -37,21 +49,25 @@ class GameScreen(level: Int) : AbstractScreen() {
         stage = Stage(ScreenViewport())
         camera = OrthographicCamera()
         settingtex = Texture(Gdx.files.internal("gui/setting.png"))
+        setting = uiFactory.createButton(settingtex)
         tiledMap = TmxMapLoader().load("maps/" + level + ".tmx")
         tiledMapRenderer = OrthogonalTiledMapRenderer(tiledMap, scale)
-        var prop = tiledMap.properties
+        val prop = tiledMap.properties
         val mapHeight: Int = prop.get("height", Int::class.java)
         val tilePixelHeight: Int = prop.get("tileheight", Int::class.java)
-        val gap = Gdx.graphics.height-mapHeight*tilePixelHeight*scale
-        posCamera = Vector3(Gdx.graphics.width.toFloat() / 2, Gdx.graphics.height.toFloat()/2 - gap+104*scale , 0f)
+        val gap = Gdx.graphics.height - mapHeight * tilePixelHeight * scale
+        posCamera = Vector3(Gdx.graphics.width.toFloat() / 2, Gdx.graphics.height.toFloat() / 2 - gap + 104 * scale, 0f)
         val path = Gdx.files.internal("maps/1conf.xml")
         readObjects = ReadObjects(path)
-
-
+        gestureDetector = GestureDetector(this)
+        player = PlayerController()
+        collisionDetector = CollisionDetector(scale, readObjects.readEnv(), camera)
+        collisionDetector.readCollision(readObjects.getObjects(), player)
     }
 
     override fun show() {
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.inputProcessor = gestureDetector
+
     }
 
     override fun buildStage() {
@@ -59,8 +75,7 @@ class GameScreen(level: Int) : AbstractScreen() {
         val h = Gdx.graphics.height.toFloat() - 48 * scale
         camera.setToOrtho(false, w, h)
         camera.update()
-        val setting: ImageButton = uiFactory.createButton(settingtex)
-        setting.setBounds(0f, Gdx.graphics.height-settingtex.height*scale/2f, settingtex.width * scale / 2, settingtex.height * scale / 2)
+        setting.setBounds(0f, Gdx.graphics.height - settingtex.height * scale / 2f, settingtex.width * scale / 2, settingtex.height * scale / 2)
         setting.imageCell.expand().fill()
         stage.addActor(setting)
 
@@ -75,7 +90,10 @@ class GameScreen(level: Int) : AbstractScreen() {
         camera.update()
         tiledMapRenderer.setView(camera)
         tiledMapRenderer.render()
-        //readObjects.draw(camera)
+        collisionDetector.readCollision(readObjects.getObjectList(), player)
+        readObjects.drawback(camera)
+        player.draw(camera, collisionDetector)
+        readObjects.drawfront(camera)
         stage.act()
         stage.draw()
     }
@@ -98,5 +116,63 @@ class GameScreen(level: Int) : AbstractScreen() {
         super.dispose()
         stage.dispose()
         settingtex.dispose()
+    }
+
+    override fun touchDown(x: Float, y: Float, pointer: Int, button: Int): Boolean {
+        start_pos = Vector3(x,y,0f)
+        return true
+    }
+
+    override fun tap(x: Float, y: Float, count: Int, button: Int): Boolean {
+        return false
+    }
+
+    override fun longPress(x: Float, y: Float): Boolean {
+        return false
+    }
+
+    override fun fling(velocityX: Float, velocityY: Float, button: Int): Boolean {
+        return false
+    }
+
+    override fun pan(x: Float, y: Float, deltaX: Float, deltaY: Float): Boolean {
+        return false
+    }
+
+    override fun panStop(x: Float, y: Float, pointer: Int, button: Int): Boolean {
+        val touch_delta = Vector3(start_pos.x - x, start_pos.y - y, 0f)
+
+        if (touch_delta.x > 250 * scale && touch_delta.y < 150 * scale && touch_delta.y > -150* scale) {
+            Gdx.app.log("dir", "left")
+            player.jump(PlayerDirection.left)
+            player.moveint = 0f
+        }
+        if (touch_delta.x < -250 * scale && touch_delta.y < 150 * scale && touch_delta.y > -150* scale) {
+            Gdx.app.log("dir", "right")
+            player.jump(PlayerDirection.right)
+            player.moveint = 0f
+        }
+        if (touch_delta.x < 150 * scale && touch_delta.x > -150* scale && touch_delta.y > 250 * scale) {
+            Gdx.app.log("dir", "up")
+            player.jump(PlayerDirection.up)
+            player.moveint = 0f
+        }
+        if (touch_delta.x < 150 * scale && touch_delta.x > -150* scale && touch_delta.y < -250 * scale) {
+            Gdx.app.log("dir", "down")
+            player.jump(PlayerDirection.down)
+            player.moveint = 0f
+        }
+        return true
+    }
+
+    override fun zoom(initialDistance: Float, distance: Float): Boolean {
+        return false
+    }
+
+    override fun pinch(initialPointer1: Vector2?, initialPointer2: Vector2?, pointer1: Vector2?, pointer2: Vector2?): Boolean {
+        return false
+    }
+
+    override fun pinchStop() {
     }
 }

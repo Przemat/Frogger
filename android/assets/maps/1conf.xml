@@ -1,27 +1,24 @@
 <?xml version="1.0"?>
 <mapsobject>
-    <position id = '3'>
-        <object type='car' model='car1' animation='0' position='0' speed = '-1'/>
-        <object type='car' model='car1' animation='0' position='8' speed = '-1'/>
+    <position id='19'>
+        <object animation='0' model='car1' position='0' speed='-1' type='car' />
+        <object animation='0' model='car1' position='8' speed='-1' type='car' />
     </position>
-    <position id = '4'>
-        <object type='car' model='car2' animation='0' position='0' speed = '2'/>
-        <object type='car' model='car2' animation='0' position='8' speed = '2'/>
+    <position id='20'>
+        <object animation='0' model='car2' position='0' speed='2' type='car' />
+        <object animation='0' model='car2' position='8' speed='2' type='car' />
     </position>
-    <position id = '6'>
-        <object type='car' model='car3' animation='0' position='0' speed = '1'/>
-        <object type='car' model='car3' animation='0' position='5' speed = '1'/>
-        <object type='car' model='car3' animation='0' position='12' speed = '1'/>
+    <position id='21'>
+        <object animation='0' model='car3' position='0' speed='1' type='car' />
+        <object animation='0' model='car3' position='5' speed='1' type='car' />
+        <object animation='0' model='car3' position='12' speed='1' type='car' />
     </position>
-    <position id = '5'>
-        <object type='car' model='car4' animation='0' position='0' speed = '-0.5'/>
-        <object type='car' model='car4' animation='0' position='8' speed = '-0.5'/>
+    <position id='22'>
+        <object animation='0' model='car4' position='0' speed='-0.5' type='car' />
+        <object animation='0' model='car4' position='8' speed='-0.5' type='car' />
     </position>
-    <position id = '7'>
-        <object type='enemy' model='snake' animation='0' position='0' speed = '-1'/>
-    </position>
-    <position id = '8'>
-        <object type='enemy' model='snake' animation='0' position='8' speed = '-1'/>
-    </position>
-
+    <environment>
+        <border down="18" height="13" />
+        <water down="24" height="6" />
+    </environment>
 </mapsobject>

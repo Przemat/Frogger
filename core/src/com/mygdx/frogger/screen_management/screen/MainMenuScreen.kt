@@ -105,7 +105,8 @@ class MainMenuScreen : AbstractScreen() {
         tiledMapRenderer!!.setView(camera)
         tiledMapRenderer!!.render()
 
-        readObjects.draw(camera!!)
+        readObjects.drawback(camera!!)
+        readObjects.drawfront(camera!!)
         stage!!.act()
         stage!!.draw()
     }
