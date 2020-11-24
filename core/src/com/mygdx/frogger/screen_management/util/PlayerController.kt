@@ -23,6 +23,7 @@ class PlayerController {
     var frogDrown: Boolean
     var frogPosition: Vector3
     var moveint: Float
+    var waterway: Float
 
 
     init {
@@ -35,6 +36,7 @@ class PlayerController {
         frogDrown = false
         frogPosition = Vector3(7 * 48 * scale, 18 * 48 * scale, 0f)
         moveint = 0f
+        waterway = 0f
     }
 
     private fun readAnim() {
@@ -130,16 +132,30 @@ class PlayerController {
 
         textureRegion = textureAtlas.findRegions("frog_up_dead")
         animation = Animation(0f, textureRegion)
-        animap += Pair("frog_right_dead", animation)
+        animap += Pair("frog_up_dead", animation)
 
         textureRegion = textureAtlas.findRegions("frog_up_stay")
         animation = Animation(0.3f, textureRegion)
         animap += Pair("frog_up_stay", animation)
+
+        textureRegion = textureAtlas.findRegions("bubble")
+        animation = Animation(0.3f, textureRegion)
+        animap += Pair("bubble", animation)
+
+        textureRegion = textureAtlas.findRegions("frog_finish")
+        animation = Animation(0.3f, textureRegion)
+        animap += Pair("frog_finish", animation)
     }
 
     fun jump(dir: PlayerDirection) {
         frogDirection = dir
         frogJump = true
+    }
+    fun watermove(){
+        Gdx.app.log("waterway", waterway.toString())
+        if(waterway!=0f){
+            frogPosition.x += 100f * waterway * Gdx.graphics.deltaTime
+        }
     }
 
     fun move() {

@@ -250,38 +250,38 @@ bfrog_up_dead
   index: -1
 bubble
   rotate: false
-  xy: 75, 32
-  size: 32, 29
+  xy: 48, 144
+  size: 48, 48
   orig: 48, 48
-  offset: 6, 9
+  offset: 0, 0
   index: 1
 bubble
   rotate: false
-  xy: 109, 32
-  size: 32, 29
+  xy: 96, 144
+  size: 48, 48
   orig: 48, 48
-  offset: 9, 9
+  offset: 0, 0
   index: 2
 fly
   rotate: false
-  xy: 31, 1
-  size: 30, 27
+  xy: 144, 144
+  size: 48, 48
   orig: 48, 48
-  offset: 8, 8
+  offset: 0, 0
   index: 1
 fly
   rotate: false
-  xy: 1, 1
-  size: 28, 28
+  xy: 192, 144
+  size: 48, 48
   orig: 48, 48
-  offset: 10, 10
+  offset: 0, 0
   index: 2
 fly
   rotate: false
-  xy: 63, 1
-  size: 28, 29
+  xy: 240, 144
+  size: 48, 48
   orig: 48, 48
-  offset: 10, 12
+  offset: 0, 0
   index: 3
 frog_up_stay
   rotate: false
@@ -447,6 +447,13 @@ frog_left_dead
 frog_right_dead
   rotate: false
   xy: 432, 192
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+frog_finish
+  rotate: false
+  xy: 0, 192
   size: 48, 48
   orig: 48, 48
   offset: 0, 0

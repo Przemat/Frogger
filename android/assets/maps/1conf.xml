@@ -17,8 +17,58 @@
         <object animation='0' model='car4' position='0' speed='-0.5' type='car' />
         <object animation='0' model='car4' position='8' speed='-0.5' type='car' />
     </position>
+    <position id='23'>
+        <object animation='0' model='car2' position='0' speed='0.5' type='car' />
+        <object animation='0' model='car2' position='4' speed='0.5' type='car' />
+    </position>
+    <position id='25'>
+        <object animation='0' model='log' position='0' speed='0.5' type='waterway' />
+        <object animation='0' model='log' position='1' speed='0.5' type='waterway' />
+        <object animation='0' model='log' position='2' speed='0.5' type='waterway' />
+
+
+        <object animation='0' model='log' position='7' speed='0.5' type='waterway' />
+        <object animation='0' model='log' position='8' speed='0.5' type='waterway' />
+        <object animation='0' model='log' position='9' speed='0.5' type='waterway' />
+    </position>
+    <position id='26'>
+        <object animation='0.5' model='turtle_left' position='13' speed='-1' type='waterway' />
+        <object animation='0.5' model='turtle_left' position='14' speed='-1' type='waterway' />
+
+
+        <object animation='0.5' model='turtle_left' position='7' speed='-1' type='waterway' />
+        <object animation='0.5' model='turtle_left' position='8' speed='-1' type='waterway' />
+    </position>
+    <position id='27'>
+        <object animation='0' model='log' position='0' speed='1' type='waterway' />
+        <object animation='0' model='log' position='1' speed='1' type='waterway' />
+        <object animation='0' model='log' position='2' speed='1' type='waterway' />
+        <object animation='0' model='log' position='3' speed='1' type='waterway' />
+
+
+        <object animation='0' model='log' position='10' speed='1' type='waterway' />
+        <object animation='0' model='log' position='11' speed='1' type='waterway' />
+        <object animation='0' model='log' position='12' speed='1' type='waterway' />
+        <object animation='0' model='log' position='13' speed='1' type='waterway' />
+    </position>
+    <position id='28'>
+        <object animation='0.5' model='turtle_right' position='12' speed='1.5' type='waterway' />
+        <object animation='0.5' model='turtle_right' position='13' speed='1.5' type='waterway' />
+        <object animation='0.5' model='turtle_right' position='14' speed='1.5' type='waterway' />
+
+        <object animation='0.5' model='turtle_right' position='2' speed='1.5' type='waterway' />
+        <object animation='0.5' model='turtle_right' position='3' speed='1.5' type='waterway' />
+        <object animation='0.5' model='turtle_right' position='4' speed='1.5' type='waterway' />
+    </position>
+    <position id='29'>
+        <object animation='0' model='log' position='10' speed='-0.3' type='waterway' />
+        <object animation='0' model='log' position='11' speed='-0.3' type='waterway' />
+        <object animation='0' model='log' position='12' speed='-0.3' type='waterway' />
+        <object animation='0' model='log' position='13' speed='-0.3' type='waterway' />
+        <object animation='0' model='log' position='14' speed='-0.3' type='waterway' />
+    </position>
     <environment>
         <border down="18" height="13" />
-        <water down="24" height="6" />
+        <water down="25" height="6" />
     </environment>
 </mapsobject>

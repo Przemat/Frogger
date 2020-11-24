@@ -92,6 +92,7 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
         tiledMapRenderer.render()
         collisionDetector.readCollision(readObjects.getObjectList(), player)
         readObjects.drawback(camera)
+        player.watermove()
         player.draw(camera, collisionDetector)
         readObjects.drawfront(camera)
         stage.act()

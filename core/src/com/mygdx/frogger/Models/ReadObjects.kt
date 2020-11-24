@@ -47,7 +47,6 @@ class ReadObjects(level: FileHandle) {
         var envArray = mutableListOf<Rectangle>()
         for (item in objects) {
             val elem = item
-            Gdx.app.log("size", elem.childCount.toString())
             for (j in 0..elem.childCount - 1) {
                 val curobj = elem.getChild(j)
                 var rectangle: Rectangle
