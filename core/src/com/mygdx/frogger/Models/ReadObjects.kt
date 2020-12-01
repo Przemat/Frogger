@@ -21,9 +21,11 @@ class ReadObjects(level: FileHandle) {
     var carAtlas: TextureAtlas
     val readList: com.badlogic.gdx.utils.Array<XmlReader.Element>?
     var objectList: Array<xml>
+    var waterobjList: Array<bfrog>
 
     //animals
     var textureAtlas: TextureAtlas
+    lateinit var envitems: XmlReader.Element
 
     init {
         stateTime = 0f
@@ -31,6 +33,7 @@ class ReadObjects(level: FileHandle) {
         carAtlas = TextureAtlas(Gdx.files.internal("gameassets/cars.atlas"))
         textureAtlas = TextureAtlas(Gdx.files.internal("gameassets/animals.atlas"))
         objectList = getObjects()
+        waterobjList = readWobj()
     }
 
     private fun readXml(): com.badlogic.gdx.utils.Array<XmlReader.Element>? {
@@ -38,25 +41,71 @@ class ReadObjects(level: FileHandle) {
         val reader = XmlReader()
         val xmlroot = reader.parse(level)
         val objects = xmlroot.getChildrenByName("position")
+        Gdx.app.log("xml", objects.size.toString())
         return objects
     }
-    fun readEnv(): Array<Rectangle> {
+
+    fun readEnv() {
         val reader = XmlReader()
         val xmlroot = reader.parse(level)
         val objects = xmlroot.getChildrenByName("environment")
-        var envArray = mutableListOf<Rectangle>()
-        for (item in objects) {
-            val elem = item
-            for (j in 0..elem.childCount - 1) {
-                val curobj = elem.getChild(j)
-                var rectangle: Rectangle
-                rectangle = Rectangle(0f,curobj.getIntAttribute("down").toFloat()*48*scale, Gdx.graphics.width.toFloat(),
-                        curobj.getIntAttribute("height").toFloat()*48*scale)
-                    envArray.add(rectangle)
-                }
-        }
-        return envArray.toTypedArray()
+        envitems = objects[0]
     }
+
+    fun readBorder(): Rectangle {
+        val curobj = envitems.getChildByName("border")
+        val rectangle = Rectangle(0f, curobj.getIntAttribute("down").toFloat() * 48 * scale, Gdx.graphics.width.toFloat(),
+                curobj.getIntAttribute("height").toFloat() * 48 * scale)
+        return rectangle
+    }
+
+    fun readWater(): Array<Rectangle> {
+        val objects = envitems.getChildrenByName("water")
+        var waterArray = mutableListOf<Rectangle>()
+        for (item in objects) {
+            val curobj = item
+            val rectangle = Rectangle(-48 * scale, curobj.getIntAttribute("down").toFloat() * 48 * scale, Gdx.graphics.width.toFloat() + 48 * 2 * scale,
+                    curobj.getIntAttribute("height").toFloat() * 48 * scale)
+            waterArray.add(rectangle)
+        }
+        return waterArray.toTypedArray()
+
+    }
+
+    fun readFinish(): Array<Rectangle> {
+        val objects = envitems.getChildByName("finish")
+        var finishArray = mutableListOf<Rectangle>()
+        for (i in 1..14 step 3) {
+            val rectangle = Rectangle(i * 48 * scale, objects.getIntAttribute("position").toFloat() * 48 * scale, 48 * scale,
+                    48 * scale)
+            finishArray.add(rectangle)
+        }
+        return finishArray.toTypedArray()
+    }
+
+    fun readWobj(): Array<bfrog>{
+        var objects = envitems.getChildrenByName("frog")
+        var finishArray = mutableListOf<bfrog>()
+        for (item in objects) {
+            val curobj = item
+            val mMap = bfrog(SpriteBatch())
+            mMap.type = type.bonus
+            mMap.pos = Vector2(scale * 48 * curobj.getFloatAttribute("x"), scale * 48 * curobj.getFloatAttribute("y"))
+            mMap.speed = curobj.getFloatAttribute("waterspeed")
+            finishArray.add(mMap)
+        }
+        objects = envitems.getChildrenByName("watersnake")
+        for (item in objects) {
+            val curobj = item
+            val mMap = bfrog(SpriteBatch())
+            mMap.type = type.enemy
+            mMap.pos = Vector2(scale * 48 * curobj.getFloatAttribute("x"), scale * 48 * curobj.getFloatAttribute("y"))
+            mMap.speed = curobj.getFloatAttribute("waterspeed")
+            finishArray.add(mMap)
+        }
+        return finishArray.toTypedArray()
+    }
+
 
 
     @JvmName("getObjects1")
@@ -176,6 +225,36 @@ class ReadObjects(level: FileHandle) {
             }
         }
     }
+
+    fun drawWater(camera: OrthographicCamera){
+        stateTime = stateTime?.plus(Gdx.graphics.deltaTime)
+
+        for (i in 0..waterobjList.size - 1) {
+            waterobjList[i].sb.projectionMatrix = camera.combined
+            if (waterobjList[i].type == type.car) {
+
+                var flip = false
+                val currentFrame = objectList[i].animation.getKeyFrame(stateTime!!, true)
+
+                if (waterobjList[i].speed < 0f) {
+                    if (waterobjList[i].pos.x >= -currentFrame!!.regionWidth * scale - 10)
+                        waterobjList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
+                    else
+                        waterobjList[i].pos.x = 48 * 15 * scale
+                } else {
+                    flip = true
+                    if (waterobjList[i].pos.x <= 15 * 48 * scale + 10)
+                        waterobjList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
+                    else
+                        waterobjList[i].pos.x = -currentFrame!!.regionWidth * scale
+                }
+                waterobjList[i].sb.begin()
+                waterobjList[i].sb.draw(currentFrame!!.texture, waterobjList[i].pos.x, waterobjList[i].pos.y, currentFrame!!.regionWidth * scale, currentFrame!!.regionHeight * scale, currentFrame!!.regionX, currentFrame!!.regionY, currentFrame!!.regionWidth, currentFrame!!.regionHeight, flip, false)
+                waterobjList[i].sb.end()
+            }
+        }
+    }
+
 
     @JvmName("getObjectList1")
     fun getObjectList(): Array<xml> {

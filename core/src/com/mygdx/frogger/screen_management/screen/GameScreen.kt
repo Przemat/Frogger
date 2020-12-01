@@ -17,6 +17,7 @@ import com.mygdx.frogger.Models.CollisionDetector
 import com.mygdx.frogger.Models.PlayerDirection
 import com.mygdx.frogger.Models.ReadObjects
 import com.mygdx.frogger.config.GameConfig
+import com.mygdx.frogger.screen_management.util.GUI
 import com.mygdx.frogger.screen_management.util.PlayerController
 import com.mygdx.frogger.screen_management.util.UIFactory
 
@@ -26,6 +27,7 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
     var tiledMap: TiledMap
     var camera: OrthographicCamera
     var tiledMapRenderer: OrthogonalTiledMapRenderer
+    var GUI: GUI
     var posCamera: Vector3
     var scale: Float = Gdx.graphics.width.toFloat() / 720
     var settingtex: Texture
@@ -37,6 +39,7 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
     var collisionDetector: CollisionDetector
     private var stage: Stage
     val setting: ImageButton
+    var finish = arrayOfNulls<String>(5)
 
     //touch
     var start_pos = Vector3(0f, 0f, 0f)
@@ -44,6 +47,7 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
 
 
     init {
+        GUI = GUI(level)
         gameConfig = GameConfig()
         uiFactory = UIFactory()
         stage = Stage(ScreenViewport())
@@ -57,11 +61,13 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
         val tilePixelHeight: Int = prop.get("tileheight", Int::class.java)
         val gap = Gdx.graphics.height - mapHeight * tilePixelHeight * scale
         posCamera = Vector3(Gdx.graphics.width.toFloat() / 2, Gdx.graphics.height.toFloat() / 2 - gap + 104 * scale, 0f)
-        val path = Gdx.files.internal("maps/1conf.xml")
+        val path = Gdx.files.internal("maps/"+level+"conf.xml")
         readObjects = ReadObjects(path)
+        readObjects.readEnv()
+
         gestureDetector = GestureDetector(this)
-        player = PlayerController()
-        collisionDetector = CollisionDetector(scale, readObjects.readEnv(), camera)
+        player = PlayerController(GUI)
+        collisionDetector = CollisionDetector(scale, readObjects.readWater(), readObjects.readBorder(), readObjects.readFinish())
         collisionDetector.readCollision(readObjects.getObjects(), player)
     }
 
@@ -83,18 +89,24 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
     }
 
     override fun render(delta: Float) {
-        Gdx.gl.glClearColor(1f, 1f, 1f, 1f)
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1f)
         Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA)
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT)
         camera.position.lerp(posCamera, 0.1f)
         camera.update()
+
         tiledMapRenderer.setView(camera)
         tiledMapRenderer.render()
         collisionDetector.readCollision(readObjects.getObjectList(), player)
+        player.frogDrown = false
+        player.frogDead = false
+        collisionDetector.readFinish(readObjects.readFinish(), player, finish, GUI)
         readObjects.drawback(camera)
         player.watermove()
         player.draw(camera, collisionDetector)
         readObjects.drawfront(camera)
+        readObjects.drawWater(camera)
+        GUI.draw()
         stage.act()
         stage.draw()
     }
@@ -144,24 +156,22 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
         val touch_delta = Vector3(start_pos.x - x, start_pos.y - y, 0f)
 
         if (touch_delta.x > 250 * scale && touch_delta.y < 150 * scale && touch_delta.y > -150* scale) {
-            Gdx.app.log("dir", "left")
-            player.jump(PlayerDirection.left)
-            player.moveint = 0f
+            if (!player.frogDead) {
+                player.jump(PlayerDirection.left)
+                player.moveint = 0f
+            }
         }
         if (touch_delta.x < -250 * scale && touch_delta.y < 150 * scale && touch_delta.y > -150* scale) {
-            Gdx.app.log("dir", "right")
-            player.jump(PlayerDirection.right)
-            player.moveint = 0f
+            if (!player.frogDead) {player.jump(PlayerDirection.right)
+            player.moveint = 0f}
         }
         if (touch_delta.x < 150 * scale && touch_delta.x > -150* scale && touch_delta.y > 250 * scale) {
-            Gdx.app.log("dir", "up")
-            player.jump(PlayerDirection.up)
-            player.moveint = 0f
+            if (!player.frogDead) {player.jump(PlayerDirection.up)
+            player.moveint = 0f}
         }
         if (touch_delta.x < 150 * scale && touch_delta.x > -150* scale && touch_delta.y < -250 * scale) {
-            Gdx.app.log("dir", "down")
-            player.jump(PlayerDirection.down)
-            player.moveint = 0f
+            if (!player.frogDead) {player.jump(PlayerDirection.down)
+            player.moveint = 0f}
         }
         return true
     }

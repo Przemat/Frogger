@@ -9,10 +9,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector3
 import com.mygdx.frogger.Models.*
 
-class PlayerController {
+class PlayerController(GUI: GUI) {
 
     var stateTime: Float
     var scale: Float = Gdx.graphics.width.toFloat() / 720
+    var GUI: GUI
 
     //animals
     var frogBatch: SpriteBatch
@@ -27,6 +28,7 @@ class PlayerController {
 
 
     init {
+        this.GUI = GUI
         stateTime = 0f
         frogBatch = SpriteBatch()
         readAnim()
@@ -164,6 +166,7 @@ class PlayerController {
                 frogPosition.y += 6 * scale
             } else {
                 frogJump = false
+                GUI.addScore(10)
             }
             moveint += 6
         } else if (frogDirection == PlayerDirection.down) {
