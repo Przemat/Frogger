@@ -1,6 +1,7 @@
 package com.mygdx.frogger.screen_management.screen
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.GL30
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
@@ -43,6 +44,12 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
     var finish = arrayOfNulls<String>(5)
     var finishTime = arrayOfNulls<Float>(5)
 
+    //sounds
+    var music = Gdx.audio.newMusic(Gdx.files.internal("sound/level.wav"))
+    var sjump = Gdx.audio.newSound(Gdx.files.internal("sound/jump.wav"))
+    var shit = Gdx.audio.newSound(Gdx.files.internal("sound/hit.wav"))
+    var ssplash = Gdx.audio.newSound(Gdx.files.internal("sound/splash.wav"))
+
     //touch
     var start_pos = Vector3(0f, 0f, 0f)
     var player: PlayerController
@@ -56,7 +63,6 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
         camera = OrthographicCamera()
         settingtex = Texture(Gdx.files.internal("gui/setting.png"))
         setting = uiFactory.createButton(settingtex)
-        setting.addListener(uiFactory.createListener(ScreenEnum.MAIN_MENU, 0))
         tiledMap = TmxMapLoader().load("maps/" + level + ".tmx")
         tiledMapRenderer = OrthogonalTiledMapRenderer(tiledMap, scale)
         val prop = tiledMap.properties
@@ -68,14 +74,21 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
         readObjects = ReadObjects(path)
         readObjects.readGame()
 
+        music.isLooping = true
+        music.volume = 0.5f
+        music.play()
+
         gestureDetector = GestureDetector(this)
         player = PlayerController(GUI)
         collisionDetector = CollisionDetector(scale, readObjects.readWater(), readObjects.readBorder(), readObjects.readFinish())
-        collisionDetector.readCollision(readObjects.getObjects(), player, readObjects.stateTime)
+        collisionDetector.readCollision(readObjects.getObjects(), player, readObjects.stateTime, shit, ssplash)
     }
 
     override fun show() {
-        Gdx.input.inputProcessor = gestureDetector
+        var inputMultiplexer = InputMultiplexer()
+        inputMultiplexer.addProcessor(stage)
+        inputMultiplexer.addProcessor(gestureDetector)
+        Gdx.input.inputProcessor = inputMultiplexer
 
     }
 
@@ -86,6 +99,7 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
         camera.update()
         setting.setBounds(0f, Gdx.graphics.height - settingtex.height * scale / 2f, settingtex.width * scale / 2, settingtex.height * scale / 2)
         setting.imageCell.expand().fill()
+        setting.addListener(uiFactory.createListener(ScreenEnum.MAIN_MENU, 0))
         stage.addActor(setting)
 
 
@@ -100,7 +114,7 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
 
         tiledMapRenderer.setView(camera)
         tiledMapRenderer.render()
-        collisionDetector.readCollision(readObjects.getObjectList(), player, readObjects.stateTime)
+        collisionDetector.readCollision(readObjects.getObjectList(), player, readObjects.stateTime, shit, ssplash)
         readObjects.finishObj(finish, finishTime)
         collisionDetector.readFinish(readObjects.readFinish(), player, finish, GUI, readObjects.stateTime)
         readObjects.drawback(camera)
@@ -133,6 +147,7 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
         super.dispose()
         stage.dispose()
         settingtex.dispose()
+        music.dispose()
     }
 
     override fun touchDown(x: Float, y: Float, pointer: Int, button: Int): Boolean {
@@ -162,20 +177,30 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
         if (touch_delta.x > 250 * scale && touch_delta.y < 200 * scale && touch_delta.y > -200* scale) {
             if (!player.frogDead) {
                 player.jump(PlayerDirection.left)
+                sjump.play(0.5f)
                 player.moveint = 0f
             }
         }
         if (touch_delta.x < -250 * scale && touch_delta.y < 200 * scale && touch_delta.y > -200* scale) {
-            if (!player.frogDead) {player.jump(PlayerDirection.right)
-            player.moveint = 0f}
+            if (!player.frogDead) {
+                player.jump(PlayerDirection.right)
+                sjump.play(0.5f)
+                player.moveint = 0f
+            }
         }
         if (touch_delta.x < 200 * scale && touch_delta.x > -200* scale && touch_delta.y > 250 * scale) {
-            if (!player.frogDead) {player.jump(PlayerDirection.up)
-            player.moveint = 0f}
+            if (!player.frogDead) {
+                player.jump(PlayerDirection.up)
+                sjump.play(0.5f)
+                player.moveint = 0f
+            }
         }
         if (touch_delta.x < 200 * scale && touch_delta.x > -200* scale && touch_delta.y < -250 * scale) {
-            if (!player.frogDead) {player.jump(PlayerDirection.down)
-            player.moveint = 0f}
+            if (!player.frogDead) {
+                player.jump(PlayerDirection.down)
+                sjump.play(0.5f)
+                player.moveint = 0f
+            }
         }
         return true
     }

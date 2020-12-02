@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
-import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.mygdx.frogger.Models.ReadObjects
 import com.mygdx.frogger.config.GameConfig
@@ -33,10 +32,13 @@ class MainMenuScreen : AbstractScreen() {
     var gameConfig: GameConfig
     var uiFactory: UIFactory
 
+    var music = Gdx.audio.newMusic(Gdx.files.internal("sound/music.wav"))
+
     val readObjects: ReadObjects
     private var stage: Stage? = null
 
     init {
+        music.stop()
         stage = Stage(ScreenViewport())
         gameConfig = GameConfig()
         uiFactory = UIFactory()
@@ -47,6 +49,9 @@ class MainMenuScreen : AbstractScreen() {
         logo = Texture(Gdx.files.internal("gui/logo.png"))
         exittex = Texture(Gdx.files.internal("gui/exit.png"))
         playtex = Texture(Gdx.files.internal("gui/play.png"))
+        music.isLooping = true
+        music.volume = 0.5f
+        music.play()
     }
     override fun buildStage() {
         val w = Gdx.graphics.width.toFloat()
@@ -64,13 +69,13 @@ class MainMenuScreen : AbstractScreen() {
         stage!!.addActor(title)
         val playButton: ImageButton = uiFactory.createButton(playtex)
         playButton.image.setFillParent(true)
-        playButton.setSize(playtex.width*scale, playtex.height*scale)
+        playButton.setSize(playtex.width * scale, playtex.height * scale)
         playButton.setPosition(0f, Gdx.graphics.height.toFloat() / 2 - playButton.height)
-        playButton.addListener(uiFactory.createListener(ScreenEnum.LEVEL_SELECT, 0))
+        playButton.addListener(uiFactory.createListener(ScreenEnum.LEVEL_SELECT, music))
         stage!!.addActor(playButton)
         val exitButton: ImageButton = uiFactory.createButton(exittex)
         exitButton.image.setFillParent(true)
-        exitButton.setSize(exittex.width*scale, exittex.height*scale )
+        exitButton.setSize(exittex.width * scale, exittex.height * scale)
         exitButton.setPosition(0f, Gdx.graphics.height.toFloat() / 3 - playButton.height)
         exitButton.addListener(
                 object : InputListener() {

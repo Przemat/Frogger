@@ -1,5 +1,6 @@
 package com.mygdx.frogger.screen_management.util
 
+import com.badlogic.gdx.audio.Music
 import com.mygdx.frogger.screen_management.screen.AbstractScreen
 import com.mygdx.frogger.screen_management.screen.GameScreen
 import com.mygdx.frogger.screen_management.screen.LevelSelectScreen
@@ -13,7 +14,7 @@ enum class ScreenEnum {
     },
     LEVEL_SELECT {
         override fun<T> getScreen(vararg params: T): AbstractScreen {
-            return LevelSelectScreen()
+            return LevelSelectScreen(params[0] as Music)
         }
     },
     GAME {

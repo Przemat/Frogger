@@ -2,6 +2,7 @@ package com.mygdx.frogger.screen_management.screen
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Preferences
+import com.badlogic.gdx.audio.Music
 import com.badlogic.gdx.graphics.GL30
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
@@ -23,7 +24,8 @@ import com.mygdx.frogger.screen_management.util.ScreenEnum
 import com.mygdx.frogger.screen_management.util.UIFactory
 
 
-class LevelSelectScreen() : AbstractScreen() {
+class LevelSelectScreen(music: Music) : AbstractScreen() {
+    var music = music
     var tiledMap: TiledMap? = null
     var camera: OrthographicCamera? = null
     var tiledMapRenderer: OrthogonalTiledMapRenderer? = null
@@ -163,6 +165,7 @@ class LevelSelectScreen() : AbstractScreen() {
         txtrLevel1.dispose()
         txtrLevel2.dispose()
         txtrLevel3.dispose()
+        music.dispose()
     }
 
 }

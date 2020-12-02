@@ -1,6 +1,6 @@
 package com.mygdx.frogger.Models
 
-import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.math.Intersector.intersectRectangles
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
@@ -22,7 +22,7 @@ class CollisionDetector {
         this.finish = finish
     }
 
-    fun readCollision(others: Array<xml>, player: PlayerController, stateTime: Float?) {
+    fun readCollision(others: Array<xml>, player: PlayerController, stateTime: Float?, shit: Sound, ssplash: Sound) {
         val playerCollision = Rectangle(player.frogPosition.x, player.frogPosition.y, 48 * scale, 48 * scale)
         var inWater = false
         if (!player.frogJump) {
@@ -35,10 +35,11 @@ class CollisionDetector {
             for (i in 0..others.size - 1) {
 
 
-                    if (others[i].type == type.car) {
+                    if (others[i].type == type.car && !player.frogDead) {
                         val otherCollision = Rectangle(others[i].pos.x+10*scale, others[i].pos.y, others[i].animation.getKeyFrame(0f)!!.regionWidth * scale-10*scale, 48 * scale)
                         if (intersectRectangles(playerCollision, otherCollision, intersector)) {
                         player.frogDead = true
+                            shit.play()
                         player.deadTime = stateTime?.plus(2f)!!
                         }
                     }
@@ -63,6 +64,7 @@ class CollisionDetector {
             }
             if (inWater && !player.frogDrown) {
                 player.frogDrown = true
+                ssplash.play()
                 player.deadTime = stateTime?.plus(2f)!!
             } else {
                 player.waterway = waterway
