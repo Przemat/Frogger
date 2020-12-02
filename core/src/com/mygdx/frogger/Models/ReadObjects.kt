@@ -21,7 +21,7 @@ class ReadObjects(level: FileHandle) {
     var carAtlas: TextureAtlas
     val readList: com.badlogic.gdx.utils.Array<XmlReader.Element>?
     var objectList: Array<xml>
-    var waterobjList: Array<bfrog>
+    lateinit var waterobjList: Array<bfrog>
 
     //animals
     var textureAtlas: TextureAtlas
@@ -33,6 +33,10 @@ class ReadObjects(level: FileHandle) {
         carAtlas = TextureAtlas(Gdx.files.internal("gameassets/cars.atlas"))
         textureAtlas = TextureAtlas(Gdx.files.internal("gameassets/animals.atlas"))
         objectList = getObjects()
+    }
+
+    fun readGame(){
+        envitems = readEnv()
         waterobjList = readWobj()
     }
 
@@ -45,11 +49,11 @@ class ReadObjects(level: FileHandle) {
         return objects
     }
 
-    fun readEnv() {
+    fun readEnv(): XmlReader.Element {
         val reader = XmlReader()
         val xmlroot = reader.parse(level)
-        val objects = xmlroot.getChildrenByName("environment")
-        envitems = objects[0]
+        val objects = xmlroot.getChildByName("environment")
+        return objects
     }
 
     fun readBorder(): Rectangle {

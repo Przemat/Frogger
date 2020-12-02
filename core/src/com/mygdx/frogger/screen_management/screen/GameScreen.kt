@@ -63,7 +63,7 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
         posCamera = Vector3(Gdx.graphics.width.toFloat() / 2, Gdx.graphics.height.toFloat() / 2 - gap + 104 * scale, 0f)
         val path = Gdx.files.internal("maps/"+level+"conf.xml")
         readObjects = ReadObjects(path)
-        readObjects.readEnv()
+        readObjects.readGame()
 
         gestureDetector = GestureDetector(this)
         player = PlayerController(GUI)
