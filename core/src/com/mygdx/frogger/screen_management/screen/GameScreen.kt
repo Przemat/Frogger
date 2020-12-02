@@ -159,21 +159,21 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
     override fun panStop(x: Float, y: Float, pointer: Int, button: Int): Boolean {
         val touch_delta = Vector3(start_pos.x - x, start_pos.y - y, 0f)
 
-        if (touch_delta.x > 250 * scale && touch_delta.y < 150 * scale && touch_delta.y > -150* scale) {
+        if (touch_delta.x > 250 * scale && touch_delta.y < 200 * scale && touch_delta.y > -200* scale) {
             if (!player.frogDead) {
                 player.jump(PlayerDirection.left)
                 player.moveint = 0f
             }
         }
-        if (touch_delta.x < -250 * scale && touch_delta.y < 150 * scale && touch_delta.y > -150* scale) {
+        if (touch_delta.x < -250 * scale && touch_delta.y < 200 * scale && touch_delta.y > -200* scale) {
             if (!player.frogDead) {player.jump(PlayerDirection.right)
             player.moveint = 0f}
         }
-        if (touch_delta.x < 150 * scale && touch_delta.x > -150* scale && touch_delta.y > 250 * scale) {
+        if (touch_delta.x < 200 * scale && touch_delta.x > -200* scale && touch_delta.y > 250 * scale) {
             if (!player.frogDead) {player.jump(PlayerDirection.up)
             player.moveint = 0f}
         }
-        if (touch_delta.x < 150 * scale && touch_delta.x > -150* scale && touch_delta.y < -250 * scale) {
+        if (touch_delta.x < 200 * scale && touch_delta.x > -200* scale && touch_delta.y < -250 * scale) {
             if (!player.frogDead) {player.jump(PlayerDirection.down)
             player.moveint = 0f}
         }

@@ -25,6 +25,7 @@ class ReadObjects(level: FileHandle) {
     val readList: com.badlogic.gdx.utils.Array<XmlReader.Element>?
     var objectList: Array<xml>
     lateinit var waterobjList: Array<bfrog>
+    lateinit var border: Rectangle
 
     //animals
     var textureAtlas: TextureAtlas
@@ -44,6 +45,7 @@ class ReadObjects(level: FileHandle) {
         envitems = readEnv()
         waterobjList = readWobj()
         finishPos = readFinish()
+        border = readBorder()
     }
 
     private fun readXml(): com.badlogic.gdx.utils.Array<XmlReader.Element>? {
@@ -73,7 +75,7 @@ class ReadObjects(level: FileHandle) {
         var waterArray = mutableListOf<Rectangle>()
         for (item in objects) {
             val curobj = item
-            val rectangle = Rectangle(-48 * scale, curobj.getIntAttribute("down").toFloat() * 48 * scale, Gdx.graphics.width.toFloat() + 48 * 2 * scale,
+            val rectangle = Rectangle(-96 * scale, curobj.getIntAttribute("down").toFloat() * 48 * scale, Gdx.graphics.width.toFloat() + 48 * 4 * scale,
                     curobj.getIntAttribute("height").toFloat() * 48 * scale)
             waterArray.add(rectangle)
         }
@@ -326,6 +328,10 @@ class ReadObjects(level: FileHandle) {
     }
 
     fun endReader(player: PlayerController, finish: Array<String?>, gui: GUI) {
+        if ((player.frogPosition.x> border.x+border.width || player.frogPosition.x < border.x)&& player.frogDead==false){
+            player.frogDead = true
+            player.deadTime = stateTime?.plus(2f)!!
+        }
         if ((player.frogDead || player.frogDrown) && stateTime!! > player.deadTime){
             player.frogPosition = Vector3(7 * 48 * scale, 18 * 48 * scale, 0f)
             player.frogJump = false

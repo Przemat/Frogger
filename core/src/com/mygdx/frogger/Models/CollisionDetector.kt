@@ -33,26 +33,33 @@ class CollisionDetector {
             }
             var waterway = 0f;
             for (i in 0..others.size - 1) {
-                val otherCollision = Rectangle(others[i].pos.x, others[i].pos.y, others[i].animation.getKeyFrame(0f)!!.regionWidth * scale, 48 * scale)
-                if (intersectRectangles(playerCollision, otherCollision, intersector)) {
+
 
                     if (others[i].type == type.car) {
+                        val otherCollision = Rectangle(others[i].pos.x+10*scale, others[i].pos.y, others[i].animation.getKeyFrame(0f)!!.regionWidth * scale-10*scale, 48 * scale)
+                        if (intersectRectangles(playerCollision, otherCollision, intersector)) {
                         player.frogDead = true
                         player.deadTime = stateTime?.plus(2f)!!
+                        }
                     }
                     else if (others[i].type == type.enemy) {
-                        player.frogDead = true
-                        player.deadTime = stateTime?.plus(2f)!!
+                        val otherCollision = Rectangle(others[i].pos.x, others[i].pos.y, others[i].animation.getKeyFrame(0f)!!.regionWidth * scale, 48 * scale)
+                        if (intersectRectangles(playerCollision, otherCollision, intersector)) {
+                            player.frogDead = true
+                            player.deadTime = stateTime?.plus(2f)!!
+                        }
                     }
                     else if (others[i].type == type.waterway) {
+                        val otherCollision = Rectangle(others[i].pos.x, others[i].pos.y, others[i].animation.getKeyFrame(0f)!!.regionWidth * scale, 48 * scale)
+                        if (intersectRectangles(playerCollision, otherCollision, intersector)) {
                         if (!player.frogDrown) {
                             inWater = false
                             waterway = others[i].speed
-                        }
+                        }}
                     } else if (others[i].type == type.bonus) {
 
                     }
-                }
+
             }
             if (inWater && !player.frogDrown) {
                 player.frogDrown = true
