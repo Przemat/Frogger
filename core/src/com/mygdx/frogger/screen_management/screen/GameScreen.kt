@@ -19,6 +19,7 @@ import com.mygdx.frogger.Models.ReadObjects
 import com.mygdx.frogger.config.GameConfig
 import com.mygdx.frogger.screen_management.util.GUI
 import com.mygdx.frogger.screen_management.util.PlayerController
+import com.mygdx.frogger.screen_management.util.ScreenEnum
 import com.mygdx.frogger.screen_management.util.UIFactory
 
 class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener {
@@ -40,6 +41,7 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
     private var stage: Stage
     val setting: ImageButton
     var finish = arrayOfNulls<String>(5)
+    var finishTime = arrayOfNulls<Float>(5)
 
     //touch
     var start_pos = Vector3(0f, 0f, 0f)
@@ -54,6 +56,7 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
         camera = OrthographicCamera()
         settingtex = Texture(Gdx.files.internal("gui/setting.png"))
         setting = uiFactory.createButton(settingtex)
+        setting.addListener(uiFactory.createListener(ScreenEnum.MAIN_MENU, 0))
         tiledMap = TmxMapLoader().load("maps/" + level + ".tmx")
         tiledMapRenderer = OrthogonalTiledMapRenderer(tiledMap, scale)
         val prop = tiledMap.properties
@@ -68,7 +71,7 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
         gestureDetector = GestureDetector(this)
         player = PlayerController(GUI)
         collisionDetector = CollisionDetector(scale, readObjects.readWater(), readObjects.readBorder(), readObjects.readFinish())
-        collisionDetector.readCollision(readObjects.getObjects(), player)
+        collisionDetector.readCollision(readObjects.getObjects(), player, readObjects.stateTime)
     }
 
     override fun show() {
@@ -97,16 +100,17 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
 
         tiledMapRenderer.setView(camera)
         tiledMapRenderer.render()
-        collisionDetector.readCollision(readObjects.getObjectList(), player)
-        player.frogDrown = false
-        player.frogDead = false
-        collisionDetector.readFinish(readObjects.readFinish(), player, finish, GUI)
+        collisionDetector.readCollision(readObjects.getObjectList(), player, readObjects.stateTime)
+        readObjects.finishObj(finish, finishTime)
+        collisionDetector.readFinish(readObjects.readFinish(), player, finish, GUI, readObjects.stateTime)
         readObjects.drawback(camera)
         player.watermove()
         player.draw(camera, collisionDetector)
         readObjects.drawfront(camera)
         readObjects.drawWater(camera)
+        readObjects.drawFinish(camera, finish)
         GUI.draw()
+        readObjects.endReader(player, finish, GUI)
         stage.act()
         stage.draw()
     }

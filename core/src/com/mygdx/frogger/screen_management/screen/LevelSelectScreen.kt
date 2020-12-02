@@ -1,9 +1,12 @@
 package com.mygdx.frogger.screen_management.screen
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Preferences
 import com.badlogic.gdx.graphics.GL30
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
@@ -30,6 +33,15 @@ class LevelSelectScreen() : AbstractScreen() {
     private var txtrLevel2: Texture
     private var txtrLevel3: Texture
     private var uiFactory: UIFactory
+    val btnLevel1: ImageButton
+    var score1Batch: SpriteBatch = SpriteBatch()
+    val btnLevel2: ImageButton
+    var score2Batch: SpriteBatch = SpriteBatch()
+    val btnLevel3: ImageButton
+    var score3Batch: SpriteBatch = SpriteBatch()
+
+    val prefs: Preferences
+    var font: BitmapFont
 
     var scale: Float = Gdx.graphics.width.toFloat() / 720
     var posCamera: Vector3 = Vector3(Gdx.graphics.width.toFloat() / 2, Gdx.graphics.height.toFloat() / 2, 0f)
@@ -39,6 +51,9 @@ class LevelSelectScreen() : AbstractScreen() {
     private var stage: Stage
 
     init {
+        font = BitmapFont()
+        font.data.scale(scale*2)
+        prefs = Gdx.app.getPreferences("game preferences")
         stage = Stage(ScreenViewport())
         gameConfig = GameConfig()
         uiFactory = UIFactory()
@@ -52,9 +67,17 @@ class LevelSelectScreen() : AbstractScreen() {
         txtrLevel1 = Texture(Gdx.files.internal("gui/level1.png"))
         txtrLevel2 = Texture(Gdx.files.internal("gui/level2.png"))
         txtrLevel3 = Texture(Gdx.files.internal("gui/level3.png"))
+
+        btnLevel1 = uiFactory.createButton(txtrLevel1)
+        btnLevel2 = uiFactory.createButton(txtrLevel2)
+        btnLevel3 = uiFactory.createButton(txtrLevel3)
     }
 
-    fun LevelSelectScreen() {
+    private fun readHS(level: Int): Int {
+        if (prefs.getInteger("highscore" + level.toString())>0)
+            return prefs.getInteger("highscore" + level.toString())
+        else
+            return 0
     }
 
     override fun show() {
@@ -79,15 +102,14 @@ class LevelSelectScreen() : AbstractScreen() {
         btnBack.setBounds(0f,0f,txtrBack.width*scale, txtrBack.height*scale)
         btnBack.imageCell.expand().fill()
         stage!!.addActor(btnBack)
-        val btnLevel1: ImageButton = uiFactory.createButton(txtrLevel1)
         btnLevel1.setBounds(60f*scale,Gdx.graphics.height*1/2f,btnLevel1.width*scale, btnLevel1.height*scale)
         btnLevel1.imageCell.expand().fill()
         stage!!.addActor(btnLevel1)
-        val btnLevel2: ImageButton = uiFactory.createButton(txtrLevel2)
+        //val btnLevel2: ImageButton = uiFactory.createButton(txtrLevel2)
         btnLevel2.setBounds(280*scale,Gdx.graphics.height*1/2f,btnLevel2.width*scale, btnLevel2.height*scale)
         btnLevel2.imageCell.expand().fill()
         stage!!.addActor(btnLevel2)
-        val btnLevel3: ImageButton = uiFactory.createButton(txtrLevel3)
+        // btnLevel3: ImageButton = uiFactory.createButton(txtrLevel3)
         btnLevel3.setBounds(500*scale,Gdx.graphics.height*1/2f,btnLevel3.width*scale, btnLevel3.height*scale)
         btnLevel3.imageCell.expand().fill()
         stage!!.addActor(btnLevel3)
@@ -118,6 +140,17 @@ class LevelSelectScreen() : AbstractScreen() {
 
         readObjects.drawback(camera!!)
         readObjects.drawfront(camera!!)
+        score1Batch.begin()
+        font.draw(score1Batch, readHS(1).toString(),btnLevel1.x+btnLevel1.width/2, btnLevel1.y - 10*scale)
+        score1Batch.end()
+
+        score2Batch.begin()
+        font.draw(score2Batch, readHS(2).toString(),btnLevel2.x+btnLevel2.width/2, btnLevel2.y - 10*scale)
+        score2Batch.end()
+
+        score3Batch.begin()
+        font.draw(score3Batch, readHS(3).toString(),btnLevel3.x+btnLevel3.width/2, btnLevel3.y - 10*scale)
+        score3Batch.end()
         stage!!.act()
         stage!!.draw()
     }

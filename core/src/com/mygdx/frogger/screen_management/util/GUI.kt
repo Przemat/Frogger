@@ -28,6 +28,7 @@ class GUI(level: Int) {
 
 
     var timeLayout: GlyphLayout
+    var lifeLayout: GlyphLayout
 
     init {
         time = 40f
@@ -42,6 +43,7 @@ class GUI(level: Int) {
         scoreLayout = GlyphLayout()
         highscoreLayout = GlyphLayout()
         timeLayout = GlyphLayout()
+        lifeLayout = GlyphLayout()
     }
 
     private fun readHS(level: Int): Int {
@@ -56,6 +58,8 @@ class GUI(level: Int) {
         if (score>highScore){
             highScore = score
             prefs.putInteger("highscore"+level.toString(), highScore)
+            prefs.flush()
+            Gdx.app.log("score", prefs.getInteger("highscore" + level.toString()).toString())
         }
     }
 
@@ -70,6 +74,9 @@ class GUI(level: Int) {
 
         timeLayout.setText(font, "Time\n"+time.toInt(), Color.WHITE, 0f, Align.center, true)
         font.draw(scoreBatch, timeLayout, 480f*scale , Gdx.graphics.height.toFloat())
+
+        timeLayout.setText(font, "Lifes\n"+lifes, Color.WHITE, 0f, Align.center, true)
+        font.draw(scoreBatch, timeLayout, 640f*scale , Gdx.graphics.height.toFloat())
 
         scoreBatch.end();
 

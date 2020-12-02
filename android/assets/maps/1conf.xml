@@ -54,13 +54,13 @@
         <object animation='0' model='log' position='13' speed='1' type='waterway' />
     </position>
     <position id='28'>
-        <object animation='0.5' model='turtle_right' position='12' speed='1.5' type='waterway' />
-        <object animation='0.5' model='turtle_right' position='13' speed='1.5' type='waterway' />
-        <object animation='0.5' model='turtle_right' position='14' speed='1.5' type='waterway' />
+        <object animation='1' model='turtle_right' position='12' speed='1.5' type='waterway' />
+        <object animation='1' model='turtle_right' position='13' speed='1.5' type='waterway' />
+        <object animation='1' model='turtle_right' position='14' speed='1.5' type='waterway' />
 
-        <object animation='0.5' model='turtle_right' position='2' speed='1.5' type='waterway' />
-        <object animation='0.5' model='turtle_right' position='3' speed='1.5' type='waterway' />
-        <object animation='0.5' model='turtle_right' position='4' speed='1.5' type='waterway' />
+        <object animation='1' model='turtle_right' position='2' speed='1.5' type='waterway' />
+        <object animation='1' model='turtle_right' position='3' speed='1.5' type='waterway' />
+        <object animation='1' model='turtle_right' position='4' speed='1.5' type='waterway' />
     </position>
     <position id='29'>
         <object animation='0' model='log' position='10' speed='-0.3' type='waterway' />

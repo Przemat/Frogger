@@ -8,8 +8,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.XmlReader
+import com.mygdx.frogger.screen_management.util.*
 import java.lang.Enum
+import kotlin.random.Random
 
 class ReadObjects(level: FileHandle) {
     var stateTime: Float? = null
@@ -26,6 +29,8 @@ class ReadObjects(level: FileHandle) {
     //animals
     var textureAtlas: TextureAtlas
     lateinit var envitems: XmlReader.Element
+    val finishSB: Array<SpriteBatch> = arrayOf(SpriteBatch(), SpriteBatch(), SpriteBatch(), SpriteBatch(), SpriteBatch())
+    lateinit var finishPos: Array<Rectangle>
 
     init {
         stateTime = 0f
@@ -38,6 +43,7 @@ class ReadObjects(level: FileHandle) {
     fun readGame(){
         envitems = readEnv()
         waterobjList = readWobj()
+        finishPos = readFinish()
     }
 
     private fun readXml(): com.badlogic.gdx.utils.Array<XmlReader.Element>? {
@@ -45,7 +51,6 @@ class ReadObjects(level: FileHandle) {
         val reader = XmlReader()
         val xmlroot = reader.parse(level)
         val objects = xmlroot.getChildrenByName("position")
-        Gdx.app.log("xml", objects.size.toString())
         return objects
     }
 
@@ -263,6 +268,79 @@ class ReadObjects(level: FileHandle) {
     @JvmName("getObjectList1")
     fun getObjectList(): Array<xml> {
         return objectList
+    }
+
+    fun drawFinish(camera: OrthographicCamera, finish: Array<String?>) {
+        stateTime = stateTime?.plus(Gdx.graphics.deltaTime)
+
+        for (i in 0..finishSB.size - 1) {
+            finishSB[i].projectionMatrix = camera.combined
+            if (finish[i] == "frog") {
+                val texture = textureAtlas.findRegion("frog_finish")
+
+                finishSB[i].begin()
+                finishSB[i].draw(texture.texture, finishPos[i].x, finishPos[i].y, texture.regionWidth * scale, texture.regionHeight * scale, texture.regionX, texture.regionY, texture.regionWidth, texture.regionHeight, false, false)
+                finishSB[i].end()
+            }
+            else if (finish[i] == "alligator"){
+                val texture = textureAtlas.findRegion("Alligator_head")
+                finishSB[i].begin()
+                finishSB[i].draw(texture.texture, finishPos[i].x, finishPos[i].y, texture.regionWidth * scale, texture.regionHeight * scale, texture.regionX, texture.regionY, texture.regionWidth, texture.regionHeight, false, false)
+                finishSB[i].end()
+            }
+            else if (finish[i] == "fly"){
+                val texture = textureAtlas.findRegions("fly")
+                val animation = Animation(0.5f, texture)
+                var currentFrame = animation.getKeyFrame(stateTime!!, true)
+
+                finishSB[i].begin()
+                finishSB[i].draw(currentFrame!!.texture, finishPos[i].x, finishPos[i].y, currentFrame!!.regionWidth * scale, currentFrame!!.regionHeight * scale, currentFrame!!.regionX, currentFrame!!.regionY, currentFrame!!.regionWidth, currentFrame!!.regionHeight, false, false)
+                finishSB[i].end()
+            }
+        }
+    }
+
+    fun finishObj(finish: Array<String?>, finishTime: Array<Float?>) {
+
+        val place = Random.nextInt(0,5)
+        val random = Random.nextInt(0,1000)
+
+            if (finish[place] == null){
+                if (random == 0 && "fly" !in finish){
+                    finish[place] = "fly"
+                    finishTime[place] = stateTime?.plus(100f)
+                    Gdx.app.log("cur", stateTime.toString())
+                    Gdx.app.log("end", finishTime[place].toString())
+                }else if( random == 9 && "alligator" !in finish){
+                    finish[place] = "alligator"
+                    finishTime[place] = stateTime?.plus(10f)
+                }
+
+            }
+        for (i in 0..finish.size -1){
+            if (finishTime[i] != null)
+            if (finishTime[i]!! <= stateTime!! && finish[i] != "frog"){
+                finish[i] = null
+            }
+        }
+    }
+
+    fun endReader(player: PlayerController, finish: Array<String?>, gui: GUI) {
+        if ((player.frogDead || player.frogDrown) && stateTime!! > player.deadTime){
+            player.frogPosition = Vector3(7 * 48 * scale, 18 * 48 * scale, 0f)
+            player.frogJump = false
+            player.frogDead = false
+            player.frogDrown = false
+            gui.time = 40f
+            player.frogDirection = PlayerDirection.up
+            gui.lifes-=1
+            if(gui.lifes<=0){
+                ScreenManager.instance.showScreen(ScreenEnum.MAIN_MENU, 0)
+            }
+        }
+        if (finish[0] == "frog" && finish[1] == "frog" && finish[2] == "frog" && finish[3] == "frog" && finish[4] == "frog" ){
+            ScreenManager.instance.showScreen(ScreenEnum.GAME, 2)
+        }
     }
 }
 

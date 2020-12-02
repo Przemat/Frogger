@@ -21,6 +21,7 @@ class PlayerController(GUI: GUI) {
     var frogDirection: PlayerDirection
     var frogJump: Boolean
     var frogDead: Boolean
+    var deadTime: Float
     var frogDrown: Boolean
     var frogPosition: Vector3
     var moveint: Float
@@ -35,6 +36,7 @@ class PlayerController(GUI: GUI) {
         frogDirection = PlayerDirection.up
         frogJump = false
         frogDead = false
+        deadTime = 0f
         frogDrown = false
         frogPosition = Vector3(7 * 48 * scale, 18 * 48 * scale, 0f)
         moveint = 0f
@@ -154,7 +156,6 @@ class PlayerController(GUI: GUI) {
         frogJump = true
     }
     fun watermove(){
-        Gdx.app.log("waterway", waterway.toString())
         if(waterway!=0f){
             frogPosition.x += 100f * waterway * Gdx.graphics.deltaTime
         }
