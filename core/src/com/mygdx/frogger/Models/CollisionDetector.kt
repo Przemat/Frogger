@@ -1,11 +1,13 @@
 package com.mygdx.frogger.Models
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.math.Intersector.intersectRectangles
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector3
 import com.mygdx.frogger.screen_management.util.GUI
 import com.mygdx.frogger.screen_management.util.PlayerController
+import sun.rmi.runtime.Log
 
 class CollisionDetector {
 
@@ -51,12 +53,16 @@ class CollisionDetector {
                         }
                     }
                     else if (others[i].type == type.waterway) {
+                        Gdx.app.log("key", (others[i].animation.getKeyFrameIndex(stateTime!!%others[i].animation.animationDuration).toString()))
                         val otherCollision = Rectangle(others[i].pos.x, others[i].pos.y, others[i].animation.getKeyFrame(0f)!!.regionWidth * scale, 48 * scale)
-                        if (intersectRectangles(playerCollision, otherCollision, intersector)) {
-                        if (!player.frogDrown) {
-                            inWater = false
-                            waterway = others[i].speed
-                        }}
+                        if (others[i].animation.getKeyFrameIndex(stateTime!!%others[i].animation.animationDuration) != 4) {
+                            if (intersectRectangles(playerCollision, otherCollision, intersector)) {
+                                if (!player.frogDrown) {
+                                    inWater = false
+                                    waterway = others[i].speed
+                                }
+                            }
+                        }
                     } else if (others[i].type == type.bonus) {
 
                     }
@@ -104,6 +110,7 @@ class CollisionDetector {
                     player.frogDirection = PlayerDirection.up
                     player.frogDrown = false
                     gui.addScore(50 + (gui.time / 0.5).toInt() * 10)
+                    if (player.frogBonus) gui.addScore(200)
                 } else if (array[i] == "frog") {
                     player.frogDrown = true
                     player.deadTime = stateTime?.plus(2f)!!
@@ -130,21 +137,26 @@ class CollisionDetector {
 
     }
 
-    fun readWater(target: bfrog, others: Array<xml>) {
+    fun readWater(target: bfrog, others: Array<xml>, player: PlayerController): String? {
         var objectCollision = Rectangle(target.pos.x - 48 * scale, target.pos.y, 48 * scale, 48 * scale)
-        if (target.speed > 0)
+        if (target.dir == PlayerDirection.right)
             objectCollision = Rectangle(target.pos.x + 48 * scale, target.pos.y, 48 * scale, 48 * scale)
 
-
+        var playerRectange = Rectangle(player.frogPosition.x, player.frogPosition.y, 48 * scale, 48 * scale)
+        if (intersectRectangles(objectCollision, playerRectange, intersector)) {
+            return "player"
+        }
         for (i in 0..others.size - 1) {
             if (others[i].type == type.waterway) {
-                val otherCollision = Rectangle(others[i].pos.x, others[i].pos.y, 48 * scale, 48 * scale)
-                if (!intersectRectangles(objectCollision, otherCollision, intersector)) {
-                    target.speed = -target.speed
+                val otherCollision = Rectangle(others[i].pos.x, others[i].pos.y, others[i].animation.getKeyFrame(0f)!!.regionWidth * scale, 48 * scale)
+                if (intersectRectangles(objectCollision, otherCollision, intersector)) {
+                    return "water"
                 }
             }
 
         }
+
+        return null
     }
 
 }

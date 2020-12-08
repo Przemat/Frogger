@@ -3,10 +3,12 @@ package com.mygdx.frogger.screen_management.screen
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Preferences
 import com.badlogic.gdx.audio.Music
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.GL30
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.GlyphLayout
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer
@@ -37,10 +39,16 @@ class LevelSelectScreen(music: Music) : AbstractScreen() {
     private var uiFactory: UIFactory
     val btnLevel1: ImageButton
     var score1Batch: SpriteBatch = SpriteBatch()
+    var score1text: String
+    var score1layout: GlyphLayout
     val btnLevel2: ImageButton
     var score2Batch: SpriteBatch = SpriteBatch()
+    var score2text: String
+    var score2layout: GlyphLayout
     val btnLevel3: ImageButton
     var score3Batch: SpriteBatch = SpriteBatch()
+    var score3text: String
+    var score3layout: GlyphLayout
 
     val prefs: Preferences
     var font: BitmapFont
@@ -73,6 +81,15 @@ class LevelSelectScreen(music: Music) : AbstractScreen() {
         btnLevel1 = uiFactory.createButton(txtrLevel1)
         btnLevel2 = uiFactory.createButton(txtrLevel2)
         btnLevel3 = uiFactory.createButton(txtrLevel3)
+
+        score1text = readHS(1).toString()
+        score2text = readHS(2).toString()
+        score3text = readHS(3).toString()
+
+        score1layout = GlyphLayout()
+        score2layout = GlyphLayout()
+        score3layout = GlyphLayout()
+
     }
 
     private fun readHS(level: Int): Int {
@@ -95,10 +112,8 @@ class LevelSelectScreen(music: Music) : AbstractScreen() {
 
         // Adding actors
         val bg = Image(txtrBg)
-        bg.scaleX = scale
-        bg.scaleY = scale
-        bg.setY((Gdx.graphics.height * 2 / 3).toFloat())
-        bg.setX((Gdx.graphics.width / 2f - bg.width))
+        bg.setBounds(Gdx.graphics.width/2f-txtrBg.width/2*scale,Gdx.graphics.height*4/5f-txtrBg.height/2*scale,txtrBg.width*scale, txtrBg.height*scale)
+
         stage!!.addActor(bg)
         val btnBack: ImageButton = uiFactory.createButton(txtrBack)
         btnBack.setBounds(0f,0f,txtrBack.width*scale, txtrBack.height*scale)
@@ -107,14 +122,17 @@ class LevelSelectScreen(music: Music) : AbstractScreen() {
         btnLevel1.setBounds(60f*scale,Gdx.graphics.height*1/2f,btnLevel1.width*scale, btnLevel1.height*scale)
         btnLevel1.imageCell.expand().fill()
         stage!!.addActor(btnLevel1)
+        score1layout.setText(font, score1text,Color.WHITE ,btnLevel1.width, Align.center, true)
         //val btnLevel2: ImageButton = uiFactory.createButton(txtrLevel2)
         btnLevel2.setBounds(280*scale,Gdx.graphics.height*1/2f,btnLevel2.width*scale, btnLevel2.height*scale)
         btnLevel2.imageCell.expand().fill()
         stage!!.addActor(btnLevel2)
+        score2layout.setText(font, score3text,Color.WHITE ,btnLevel2.width, Align.center, true)
         // btnLevel3: ImageButton = uiFactory.createButton(txtrLevel3)
         btnLevel3.setBounds(500*scale,Gdx.graphics.height*1/2f,btnLevel3.width*scale, btnLevel3.height*scale)
         btnLevel3.imageCell.expand().fill()
         stage!!.addActor(btnLevel3)
+        score3layout.setText(font, score3text,Color.WHITE ,btnLevel3.width, Align.center, true)
         btnBack.addListener(uiFactory.createListener(ScreenEnum.MAIN_MENU, 0))
         btnLevel1.addListener(uiFactory.createListener(ScreenEnum.GAME, 1))
         btnLevel2.addListener(uiFactory.createListener(ScreenEnum.GAME, 2))
@@ -143,15 +161,15 @@ class LevelSelectScreen(music: Music) : AbstractScreen() {
         readObjects.drawback(camera!!)
         readObjects.drawfront(camera!!)
         score1Batch.begin()
-        font.draw(score1Batch, readHS(1).toString(),btnLevel1.x+btnLevel1.width/2, btnLevel1.y - 10*scale)
+        font.draw(score1Batch, score1layout,btnLevel1.x , btnLevel1.y)
         score1Batch.end()
 
         score2Batch.begin()
-        font.draw(score2Batch, readHS(2).toString(),btnLevel2.x+btnLevel2.width/2, btnLevel2.y - 10*scale)
+        font.draw(score2Batch, score2layout,btnLevel2.x , btnLevel2.y)
         score2Batch.end()
 
         score3Batch.begin()
-        font.draw(score3Batch, readHS(3).toString(),btnLevel3.x+btnLevel3.width/2, btnLevel3.y - 10*scale)
+        font.draw(score3Batch, score3layout,btnLevel3.x , btnLevel3.y)
         score3Batch.end()
         stage!!.act()
         stage!!.draw()

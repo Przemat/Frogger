@@ -6,18 +6,22 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.utils.XmlReader
-import com.mygdx.frogger.screen_management.util.*
+import com.mygdx.frogger.screen_management.util.GUI
+import com.mygdx.frogger.screen_management.util.PlayerController
+import com.mygdx.frogger.screen_management.util.ScreenEnum
+import com.mygdx.frogger.screen_management.util.ScreenManager
 import java.lang.Enum
 import kotlin.random.Random
 
 class ReadObjects(level: FileHandle) {
     var stateTime: Float? = null
-
     var level = level
+
     var scale: Float = Gdx.graphics.width.toFloat() / 720
 
     //cars
@@ -103,6 +107,8 @@ class ReadObjects(level: FileHandle) {
             mMap.type = type.bonus
             mMap.pos = Vector2(scale * 48 * curobj.getFloatAttribute("x"), scale * 48 * curobj.getFloatAttribute("y"))
             mMap.speed = curobj.getFloatAttribute("waterspeed")
+            mMap.dir = PlayerDirection.right
+            mMap.stay = 2f
             finishArray.add(mMap)
         }
         objects = envitems.getChildrenByName("watersnake")
@@ -112,6 +118,8 @@ class ReadObjects(level: FileHandle) {
             mMap.type = type.enemy
             mMap.pos = Vector2(scale * 48 * curobj.getFloatAttribute("x"), scale * 48 * curobj.getFloatAttribute("y"))
             mMap.speed = curobj.getFloatAttribute("waterspeed")
+            mMap.dir = PlayerDirection.right
+            mMap.stay = 0f
             finishArray.add(mMap)
         }
         return finishArray.toTypedArray()
@@ -146,10 +154,6 @@ class ReadObjects(level: FileHandle) {
                     mMap.speed = curobj.getFloatAttribute("speed")
                     mMap.pos = Vector2(scale * 48 * curobj.getFloatAttribute("position"), pos * 48 * scale)
                     objects.add(mMap)
-
-                } else if (curobj.getAttribute("type") == "bonus") {
-                    atlas = textureAtlas
-
                 } else {
                     atlas = textureAtlas
                     val mMap = xml(SpriteBatch())
@@ -169,24 +173,23 @@ class ReadObjects(level: FileHandle) {
         stateTime = stateTime?.plus(Gdx.graphics.deltaTime)
 
         for (i in 0..objectList.size - 1) {
-            objectList[i].sb.projectionMatrix = camera!!.combined
+            objectList[i].sb.projectionMatrix = camera.combined
             if (objectList[i].type === type.waterway) {
                 val currentFrame = objectList[i].animation.getKeyFrame(stateTime!!, true)
                 if (objectList[i].speed < 0f) {
                     if (objectList[i].pos.x >= -currentFrame!!.regionWidth * scale - 10)
                         objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
                     else
-                        objectList[i].pos.x = 48 * 15 * scale + currentFrame!!.regionWidth * scale
+                        objectList[i].pos.x = 48 * 15 * scale + currentFrame.regionWidth * scale
                 } else {
                     if (objectList[i].pos.x <= 15 * 48 * scale + currentFrame!!.regionWidth * scale + 10)
                         objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
                     else
-                        objectList[i].pos.x = -currentFrame!!.regionWidth * scale
+                        objectList[i].pos.x = -currentFrame.regionWidth * scale
                 }
                 objectList[i].sb.begin()
-                objectList[i].sb.draw(currentFrame, objectList[i].pos.x, objectList[i].pos.y, currentFrame!!.regionWidth * scale, currentFrame!!.regionHeight * scale)
+                objectList[i].sb.draw(currentFrame, objectList[i].pos.x, objectList[i].pos.y, currentFrame.regionWidth * scale, currentFrame.regionHeight * scale)
                 objectList[i].sb.end()
-            } else if (objectList[i].type === type.bonus) {
             } else if (objectList[i].type === type.enemy) {
                 var flip = false
                 val currentFrame = objectList[i].animation.getKeyFrame(stateTime!!, true)
@@ -195,15 +198,15 @@ class ReadObjects(level: FileHandle) {
                     if (objectList[i].pos.x >= -currentFrame!!.regionWidth * scale - 10)
                         objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
                     else
-                        objectList[i].pos.x = 48 * 15 * scale + currentFrame!!.regionWidth * scale
+                        objectList[i].pos.x = 48 * 15 * scale + currentFrame.regionWidth * scale
                 } else {
                     if (objectList[i].pos.x <= 15 * 48 * scale + currentFrame!!.regionWidth * scale + 10)
                         objectList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
                     else
-                        objectList[i].pos.x = -currentFrame!!.regionWidth * scale
+                        objectList[i].pos.x = -currentFrame.regionWidth * scale
                 }
                 objectList[i].sb.begin()
-                objectList[i].sb.draw(currentFrame!!.texture, objectList[i].pos.x, objectList[i].pos.y, currentFrame!!.regionWidth * scale, currentFrame!!.regionHeight * scale, currentFrame!!.regionX, currentFrame!!.regionY, currentFrame!!.regionWidth, currentFrame!!.regionHeight, flip, false)
+                objectList[i].sb.draw(currentFrame.texture, objectList[i].pos.x, objectList[i].pos.y, currentFrame.regionWidth * scale, currentFrame.regionHeight * scale, currentFrame.regionX, currentFrame!!.regionY, currentFrame.regionWidth, currentFrame.regionHeight, flip, false)
                 objectList[i].sb.end()
             }
         }
@@ -237,31 +240,106 @@ class ReadObjects(level: FileHandle) {
         }
     }
 
-    fun drawWater(camera: OrthographicCamera){
+    fun drawWater(camera: OrthographicCamera, collisionDetector: CollisionDetector, player: PlayerController) {
         stateTime = stateTime?.plus(Gdx.graphics.deltaTime)
 
         for (i in 0..waterobjList.size - 1) {
             waterobjList[i].sb.projectionMatrix = camera.combined
-            if (waterobjList[i].type == type.car) {
+            if (waterobjList[i].type != null) {
+                if (waterobjList[i].pos.x > Gdx.graphics.width)
+                    waterobjList[i].pos.x = -48 * scale
+                else if (waterobjList[i].pos.x < -48 * scale)
+                    waterobjList[i].pos.x = Gdx.graphics.width.toFloat()
 
-                var flip = false
-                val currentFrame = objectList[i].animation.getKeyFrame(stateTime!!, true)
+                if (waterobjList[i].type == type.bonus) {
+                    var currentFrame: TextureRegion = TextureRegion()
+                    currentFrame = textureAtlas.findRegion("bfrog_right_jump")
+                    if (stateTime!! > waterobjList[i].stay) {
+                        if (waterobjList[i].dir == PlayerDirection.right) {
+                            if (collisionDetector.readWater(waterobjList[i], objectList, player) == "player") {
+                                waterobjList[i] = bfrog(SpriteBatch())
+                                player.frogBonus = true
+                            }else if (collisionDetector.readWater(waterobjList[i], objectList, player) == "water") {
+                                currentFrame = textureAtlas.findRegion("bfrog_right_jump")
+                                waterobjList[i].pos.x += 100f * (waterobjList[i].speed + 0.5f) * Gdx.graphics.deltaTime
+                            }else {
+                                waterobjList[i].stay = stateTime!!.plus(2f)
+                                waterobjList[i].dir = PlayerDirection.left
+                            }
+                        } else {
+                            if (collisionDetector.readWater(waterobjList[i], objectList, player) == "player") {
+                                waterobjList[i] = bfrog(SpriteBatch())
+                                player.frogBonus = true
+                            }else if (collisionDetector.readWater(waterobjList[i], objectList, player) == "water") {
+                                currentFrame = textureAtlas.findRegion("bfrog_left_jump")
+                                waterobjList[i].pos.x += 100f * (waterobjList[i].speed - 0.5f) * Gdx.graphics.deltaTime
+                            }else {
+                                waterobjList[i].stay = stateTime!!.plus(2f)
+                                waterobjList[i].dir = PlayerDirection.right
+                            }
+                        }
+                    } else {
+                        if (waterobjList[i].dir == PlayerDirection.right) {
+                            if (collisionDetector.readWater(waterobjList[i], objectList, player) == "player") {
+                                waterobjList[i] = bfrog(SpriteBatch())
+                                player.frogBonus = true
+                            }else if (collisionDetector.readWater(waterobjList[i], objectList, player) == "water") {
+                                currentFrame = textureAtlas.findRegion("bfrog_right_stay")
+                                waterobjList[i].pos.x += 100f * waterobjList[i].speed * Gdx.graphics.deltaTime
+                            }else {
+                                currentFrame = textureAtlas.findRegion("bfrog_right_stay")
+                                waterobjList[i].pos.x += 100f * waterobjList[i].speed * Gdx.graphics.deltaTime
+                            }
+                        } else {
+                            if (collisionDetector.readWater(waterobjList[i], objectList, player) == "player") {
+                                waterobjList[i] = bfrog(SpriteBatch())
+                                player.frogBonus = true
+                            }else if (collisionDetector.readWater(waterobjList[i], objectList, player) == "water") {
+                                currentFrame = textureAtlas.findRegion("bfrog_left_stay")
+                                waterobjList[i].pos.x += 100f * waterobjList[i].speed * Gdx.graphics.deltaTime
+                            }else {
+                                currentFrame = textureAtlas.findRegion("bfrog_left_stay")
+                                waterobjList[i].pos.x += 100f * waterobjList[i].speed * Gdx.graphics.deltaTime
+                            }
+                        }
+                    }
 
-                if (waterobjList[i].speed < 0f) {
-                    if (waterobjList[i].pos.x >= -currentFrame!!.regionWidth * scale - 10)
-                        waterobjList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
+                    if (waterobjList[i].type != null) {
+                        waterobjList[i].sb.begin()
+                        waterobjList[i].sb.draw(currentFrame!!.texture, waterobjList[i].pos.x, waterobjList[i].pos.y, currentFrame!!.regionWidth * scale, currentFrame!!.regionHeight * scale, currentFrame!!.regionX, currentFrame!!.regionY, currentFrame!!.regionWidth, currentFrame!!.regionHeight, false, false)
+                        waterobjList[i].sb.end()
+                    }
+                } else if (waterobjList[i].type == type.enemy) {
+                    var texture = textureAtlas.findRegions("snake")
+                    var animation = Animation(0.5f, texture)
+
+                    if (waterobjList[i].dir == PlayerDirection.right) {
+                        if (collisionDetector.readWater(waterobjList[i], objectList, player) == "water") {
+                            waterobjList[i].pos.x += 100f * (waterobjList[i].speed + 0.5f * scale) * Gdx.graphics.deltaTime
+                        } else if (collisionDetector.readWater(waterobjList[i], objectList, player) == "player") {
+                            player.frogDead = true
+                            player.deadTime.plus(2f)
+                        } else {
+                            waterobjList[i].dir = PlayerDirection.left
+                        }
+                    } else {
+                        if (collisionDetector.readWater(waterobjList[i], objectList, player) == "water") {
+                            waterobjList[i].pos.x += 100f * (waterobjList[i].speed - 0.5f * scale) * Gdx.graphics.deltaTime
+                        } else if (collisionDetector.readWater(waterobjList[i], objectList, player) == "player") {
+                            player.frogDead = true
+                            player.deadTime.plus(2f)
+                        } else {
+                            waterobjList[i].dir = PlayerDirection.right
+                        }
+                    }
+                    var currentFrame = animation.getKeyFrame(stateTime!!, true)
+                    waterobjList[i].sb.begin()
+                    if (waterobjList[i].dir == PlayerDirection.left)
+                        waterobjList[i].sb.draw(currentFrame!!.texture, waterobjList[i].pos.x, waterobjList[i].pos.y, currentFrame.regionWidth * scale, currentFrame.regionHeight * scale, currentFrame.regionX, currentFrame.regionY, currentFrame.regionWidth, currentFrame.regionHeight, true, false)
                     else
-                        waterobjList[i].pos.x = 48 * 15 * scale
-                } else {
-                    flip = true
-                    if (waterobjList[i].pos.x <= 15 * 48 * scale + 10)
-                        waterobjList[i].pos.x += 100f * objectList[i].speed * Gdx.graphics.deltaTime
-                    else
-                        waterobjList[i].pos.x = -currentFrame!!.regionWidth * scale
+                        waterobjList[i].sb.draw(currentFrame!!.texture, waterobjList[i].pos.x, waterobjList[i].pos.y, currentFrame.regionWidth * scale, currentFrame.regionHeight * scale, currentFrame.regionX, currentFrame.regionY, currentFrame.regionWidth, currentFrame.regionHeight, false, false)
+                    waterobjList[i].sb.end()
                 }
-                waterobjList[i].sb.begin()
-                waterobjList[i].sb.draw(currentFrame!!.texture, waterobjList[i].pos.x, waterobjList[i].pos.y, currentFrame!!.regionWidth * scale, currentFrame!!.regionHeight * scale, currentFrame!!.regionX, currentFrame!!.regionY, currentFrame!!.regionWidth, currentFrame!!.regionHeight, flip, false)
-                waterobjList[i].sb.end()
             }
         }
     }
@@ -296,7 +374,7 @@ class ReadObjects(level: FileHandle) {
                 var currentFrame = animation.getKeyFrame(stateTime!!, true)
 
                 finishSB[i].begin()
-                finishSB[i].draw(currentFrame!!.texture, finishPos[i].x, finishPos[i].y, currentFrame!!.regionWidth * scale, currentFrame!!.regionHeight * scale, currentFrame!!.regionX, currentFrame!!.regionY, currentFrame!!.regionWidth, currentFrame!!.regionHeight, false, false)
+                finishSB[i].draw(currentFrame!!.texture, finishPos[i].x, finishPos[i].y, currentFrame.regionWidth * scale, currentFrame.regionHeight * scale, currentFrame.regionX, currentFrame.regionY, currentFrame.regionWidth, currentFrame.regionHeight, false, false)
                 finishSB[i].end()
             }
         }
@@ -319,33 +397,36 @@ class ReadObjects(level: FileHandle) {
                 }
 
             }
-        for (i in 0..finish.size -1){
+        for (i in 0..finish.size - 1) {
             if (finishTime[i] != null)
-            if (finishTime[i]!! <= stateTime!! && finish[i] != "frog"){
-                finish[i] = null
-            }
+                if (finishTime[i]!! <= stateTime!! && finish[i] != "frog") {
+                    finish[i] = null
+                }
         }
     }
 
-    fun endReader(player: PlayerController, finish: Array<String?>, gui: GUI) {
-        if ((player.frogPosition.x> border.x+border.width || player.frogPosition.x < border.x)&& player.frogDead==false){
+    fun endReader(player: PlayerController, finish: Array<String?>, gui: GUI, level: Int) {
+        if ((player.frogPosition.x > border.x + border.width || player.frogPosition.x < border.x) && player.frogDead == false) {
             player.frogDead = true
             player.deadTime = stateTime?.plus(2f)!!
         }
-        if ((player.frogDead || player.frogDrown) && stateTime!! > player.deadTime){
+        if ((player.frogDead || player.frogDrown) && stateTime!! > player.deadTime) {
             player.frogPosition = Vector3(7 * 48 * scale, 18 * 48 * scale, 0f)
             player.frogJump = false
             player.frogDead = false
             player.frogDrown = false
+            player.frogBonus = false
             gui.time = 40f
             player.frogDirection = PlayerDirection.up
-            gui.lifes-=1
-            if(gui.lifes<=0){
+            gui.lifes -= 1
+            if (gui.lifes <= 0) {
                 ScreenManager.instance.showScreen(ScreenEnum.MAIN_MENU, 0)
             }
         }
-        if (finish[0] == "frog" && finish[1] == "frog" && finish[2] == "frog" && finish[3] == "frog" && finish[4] == "frog" ){
-            ScreenManager.instance.showScreen(ScreenEnum.GAME, 2)
+        if (finish[0] == "frog" && finish[1] == "frog" && finish[2] == "frog" && finish[3] == "frog" && finish[4] == "frog") {
+            if (level <= 2) ScreenManager.instance.showScreen(ScreenEnum.GAME, level + 1)
+            else ScreenManager.instance.showScreen(ScreenEnum.MAIN_MENU, 0)
+
         }
     }
 }

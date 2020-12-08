@@ -121,10 +121,10 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
         player.watermove()
         player.draw(camera, collisionDetector)
         readObjects.drawfront(camera)
-        readObjects.drawWater(camera)
+        readObjects.drawWater(camera, collisionDetector, player)
         readObjects.drawFinish(camera, finish)
         GUI.draw()
-        readObjects.endReader(player, finish, GUI)
+        readObjects.endReader(player, finish, GUI, level)
         stage.act()
         stage.draw()
     }
@@ -174,28 +174,28 @@ class GameScreen(level: Int) : AbstractScreen(), GestureDetector.GestureListener
     override fun panStop(x: Float, y: Float, pointer: Int, button: Int): Boolean {
         val touch_delta = Vector3(start_pos.x - x, start_pos.y - y, 0f)
 
-        if (touch_delta.x > 250 * scale && touch_delta.y < 200 * scale && touch_delta.y > -200* scale) {
+        if (touch_delta.x > 200 * scale && touch_delta.y < 200 * scale && touch_delta.y > -200* scale) {
             if (!player.frogDead) {
                 player.jump(PlayerDirection.left)
                 sjump.play(0.5f)
                 player.moveint = 0f
             }
         }
-        if (touch_delta.x < -250 * scale && touch_delta.y < 200 * scale && touch_delta.y > -200* scale) {
+        if (touch_delta.x < -200 * scale && touch_delta.y < 200 * scale && touch_delta.y > -200* scale) {
             if (!player.frogDead) {
                 player.jump(PlayerDirection.right)
                 sjump.play(0.5f)
                 player.moveint = 0f
             }
         }
-        if (touch_delta.x < 200 * scale && touch_delta.x > -200* scale && touch_delta.y > 250 * scale) {
+        if (touch_delta.x < 200 * scale && touch_delta.x > -200* scale && touch_delta.y > 200 * scale) {
             if (!player.frogDead) {
                 player.jump(PlayerDirection.up)
                 sjump.play(0.5f)
                 player.moveint = 0f
             }
         }
-        if (touch_delta.x < 200 * scale && touch_delta.x > -200* scale && touch_delta.y < -250 * scale) {
+        if (touch_delta.x < 200 * scale && touch_delta.x > -200* scale && touch_delta.y < -200 * scale) {
             if (!player.frogDead) {
                 player.jump(PlayerDirection.down)
                 sjump.play(0.5f)

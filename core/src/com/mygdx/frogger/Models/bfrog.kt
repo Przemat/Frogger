@@ -6,9 +6,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import kotlin.properties.Delegates
 
-class bfrog (val spriteBatch: SpriteBatch) {
+data class bfrog (val spriteBatch: SpriteBatch) {
     var sb: SpriteBatch = spriteBatch
-    lateinit var type: type
+    var type: type? = null
     lateinit var pos: Vector2
+    lateinit var dir: PlayerDirection
+    var stay by Delegates.notNull<Float>()
     var speed by Delegates.notNull<Float>()
 }

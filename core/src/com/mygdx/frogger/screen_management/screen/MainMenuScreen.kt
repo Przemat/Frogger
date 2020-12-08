@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton
+import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.mygdx.frogger.Models.ReadObjects
 import com.mygdx.frogger.config.GameConfig
@@ -62,21 +63,20 @@ class MainMenuScreen : AbstractScreen() {
         tiledMapRenderer = OrthogonalTiledMapRenderer(tiledMap, scale)
 
         val title = Image(logo)
-        title.scaleX = scale
-        title.scaleY = scale
-        title.setY((Gdx.graphics.height * 2 / 3).toFloat())
-        title.setX((Gdx.graphics.width / 2f - title.width))
+        title.setBounds(Gdx.graphics.width/2f-logo.width/2*scale,Gdx.graphics.height*2/3f-logo.height/2*scale,logo.width*scale, logo.height*scale)
         stage!!.addActor(title)
         val playButton: ImageButton = uiFactory.createButton(playtex)
+        playButton.image.setOrigin(Align.center)
+        playButton.image.setScale(scale)
+        playButton.setPosition(Gdx.graphics.width/2f-playtex.width*scale/2, Gdx.graphics.height/2f- playtex.height*scale/2)
         playButton.image.setFillParent(true)
-        playButton.setSize(playtex.width * scale, playtex.height * scale)
-        playButton.setPosition(0f, Gdx.graphics.height.toFloat() / 2 - playButton.height)
         playButton.addListener(uiFactory.createListener(ScreenEnum.LEVEL_SELECT, music))
         stage!!.addActor(playButton)
         val exitButton: ImageButton = uiFactory.createButton(exittex)
         exitButton.image.setFillParent(true)
-        exitButton.setSize(exittex.width * scale, exittex.height * scale)
-        exitButton.setPosition(0f, Gdx.graphics.height.toFloat() / 3 - playButton.height)
+        exitButton.image.setOrigin(Align.center)
+        exitButton.image.setScale(scale)
+        exitButton.setPosition(Gdx.graphics.width/2f-playtex.width*scale/2, Gdx.graphics.height/3f- exittex.height*scale/2)
         exitButton.addListener(
                 object : InputListener() {
                     override fun touchDown(event: InputEvent, x: Float, y: Float, pointer: Int, button: Int): Boolean {

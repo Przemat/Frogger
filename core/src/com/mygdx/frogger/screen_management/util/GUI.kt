@@ -66,16 +66,16 @@ class GUI(level: Int) {
     fun draw(){
         time-=Gdx.graphics.deltaTime
         scoreBatch.begin();
-        scoreLayout.setText(font, "Score\n"+score, Color.WHITE, 0f, Align.center, true)
+        scoreLayout.setText(font, "Wynik\n"+score, Color.WHITE, 0f, Align.center, true)
         font.draw(scoreBatch, scoreLayout, 160f*scale , Gdx.graphics.height.toFloat())
 
-        highscoreLayout.setText(font, "Highscore\n"+score, Color.WHITE, 0f, Align.center, true)
+        highscoreLayout.setText(font, "Rekord\n"+score, Color.WHITE, 0f, Align.center, true)
             font.draw(scoreBatch, highscoreLayout, 320f*scale , Gdx.graphics.height.toFloat())
 
-        timeLayout.setText(font, "Time\n"+time.toInt(), Color.WHITE, 0f, Align.center, true)
+        timeLayout.setText(font, "Czas\n"+time.toInt(), Color.WHITE, 0f, Align.center, true)
         font.draw(scoreBatch, timeLayout, 480f*scale , Gdx.graphics.height.toFloat())
 
-        timeLayout.setText(font, "Lifes\n"+lifes, Color.WHITE, 0f, Align.center, true)
+        timeLayout.setText(font, "Zycia\n"+lifes, Color.WHITE, 0f, Align.center, true)
         font.draw(scoreBatch, timeLayout, 640f*scale , Gdx.graphics.height.toFloat())
 
         scoreBatch.end();

@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector3
-import com.mygdx.frogger.Models.*
+import com.mygdx.frogger.Models.CollisionDetector
+import com.mygdx.frogger.Models.PlayerDirection
 
 class PlayerController(GUI: GUI) {
 
@@ -26,6 +27,7 @@ class PlayerController(GUI: GUI) {
     var frogPosition: Vector3
     var moveint: Float
     var waterway: Float
+    var frogBonus: Boolean
 
 
     init {
@@ -41,6 +43,7 @@ class PlayerController(GUI: GUI) {
         frogPosition = Vector3(7 * 48 * scale, 18 * 48 * scale, 0f)
         moveint = 0f
         waterway = 0f
+        frogBonus = false
     }
 
     private fun readAnim() {
@@ -201,62 +204,74 @@ class PlayerController(GUI: GUI) {
         var currentFrame: TextureRegion? = null
         if (frogDirection == PlayerDirection.up) {
             if (frogDead) {
-                currentFrame = animap["frog_up_dead"]?.getKeyFrame(stateTime, true)
+                currentFrame = if (frogBonus) animap["bfrog_up_dead"]?.getKeyFrame(stateTime, true)
+                else animap["frog_up_dead"]?.getKeyFrame(stateTime, true)
             } else if (frogDrown) {
                 currentFrame = animap["bubble"]?.getKeyFrame(stateTime, true)
             } else {
                 if (frogJump) {
-                    currentFrame = animap["frog_up_jump"]?.getKeyFrame(stateTime, true)
+                    currentFrame = if (frogBonus) animap["bfrog_up_jump"]?.getKeyFrame(stateTime, true)
+                    else animap["frog_up_jump"]?.getKeyFrame(stateTime, true)
                     if (collisionDetector.readBorder(frogPosition, frogDirection))
                         move()
                     else frogJump = false
                 } else {
-                    currentFrame = animap["frog_up_stay"]?.getKeyFrame(stateTime, true)
+                    currentFrame = if (frogBonus) animap["bfrog_up_stay"]?.getKeyFrame(stateTime, true)
+                    else animap["frog_up_stay"]?.getKeyFrame(stateTime, true)
                 }
             }
         } else if (frogDirection == PlayerDirection.down) {
             if (frogDead) {
-                currentFrame = animap["frog_down_dead"]?.getKeyFrame(stateTime, true)
+                currentFrame = if (frogBonus) animap["bfrog_down_dead"]?.getKeyFrame(stateTime, true)
+                else animap["frog_down_dead"]?.getKeyFrame(stateTime, true)
             } else if (frogDrown) {
                 currentFrame = animap["bubble"]?.getKeyFrame(stateTime, true)
             } else {
                 if (frogJump) {
-                    currentFrame = animap["frog_down_jump"]?.getKeyFrame(stateTime, true)
+                    currentFrame = if (frogBonus) animap["bfrog_down_jump"]?.getKeyFrame(stateTime, true)
+                    else animap["frog_down_jump"]?.getKeyFrame(stateTime, true)
                     if (collisionDetector.readBorder(frogPosition, frogDirection))
                         move()
                     else frogJump = false
                 } else {
-                    currentFrame = animap["frog_down_stay"]?.getKeyFrame(stateTime, true)
+                    currentFrame = if (frogBonus) animap["bfrog_down_stay"]?.getKeyFrame(stateTime, true)
+                    else animap["frog_down_stay"]?.getKeyFrame(stateTime, true)
                 }
             }
         } else if (frogDirection == PlayerDirection.left) {
             if (frogDead) {
-                currentFrame = animap["frog_left_dead"]?.getKeyFrame(stateTime, true)
+                currentFrame = if (frogBonus) animap["bfrog_left_dead"]?.getKeyFrame(stateTime, true)
+                else animap["frog_left_dead"]?.getKeyFrame(stateTime, true)
             } else if (frogDrown) {
                 currentFrame = animap["bubble"]?.getKeyFrame(stateTime, true)
             } else {
                 if (frogJump) {
-                    currentFrame = animap["frog_left_jump"]?.getKeyFrame(stateTime, true)
+                    currentFrame = if (frogBonus) animap["bfrog_left_jump"]?.getKeyFrame(stateTime, true)
+                    else animap["frog_left_jump"]?.getKeyFrame(stateTime, true)
                     if (collisionDetector.readBorder(frogPosition, frogDirection))
                         move()
                     else frogJump = false
                 } else {
-                    currentFrame = animap["frog_left_stay"]?.getKeyFrame(stateTime, true)
+                    currentFrame = if (frogBonus) animap["bfrog_left_stay"]?.getKeyFrame(stateTime, true)
+                    else animap["frog_left_stay"]?.getKeyFrame(stateTime, true)
                 }
             }
         } else if (frogDirection == PlayerDirection.right) {
             if (frogDead) {
-                currentFrame = animap["frog_right_dead"]?.getKeyFrame(stateTime, true)
+                currentFrame = if (frogBonus) animap["bfrog_right_dead"]?.getKeyFrame(stateTime, true)
+                else animap["frog_right_dead"]?.getKeyFrame(stateTime, true)
             } else if (frogDrown) {
                 currentFrame = animap["bubble"]?.getKeyFrame(stateTime, true)
             } else {
                 if (frogJump) {
-                    currentFrame = animap["frog_right_jump"]?.getKeyFrame(stateTime, true)
+                    currentFrame = if (frogBonus) animap["bfrog_right_jump"]?.getKeyFrame(stateTime, true)
+                    else animap["frog_right_jump"]?.getKeyFrame(stateTime, true)
                     if (collisionDetector.readBorder(frogPosition, frogDirection))
                         move()
                     else frogJump = false
                 } else {
-                    currentFrame = animap["frog_right_stay"]?.getKeyFrame(stateTime, true)
+                    currentFrame = if (frogBonus) animap["bfrog_right_stay"]?.getKeyFrame(stateTime, true)
+                    else animap["frog_right_stay"]?.getKeyFrame(stateTime, true)
                 }
             }
         }
